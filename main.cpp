@@ -48,17 +48,22 @@ void displayFrame(void) {
     M=glm::rotate(M, branch->direction, glm::vec3(0.0f, 1.0f, 0.0f));
     M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
     glLoadMatrixf(glm::value_ptr(V*M));
-    float lineVertices[] = {
+
+    float branchVertices[] = {
       0, 0, 0,
       0, branch->length(), 0
     };
 
+    int branchIndexes[] = {
+      0, 1 
+    };
+
     glEnableClientState(GL_VERTEX_ARRAY);
     //glEnableClientState(GL_COLOR_ARRAY);
-    glVertexPointer(3,GL_FLOAT,0,lineVertices);
+    glVertexPointer(3,GL_FLOAT,0,branchVertices);
     //glColorPointer(3,GL_FLOAT,0,cubeColors);	
 
-    glDrawArrays(GL_LINES,0,2);
+    glDrawElements(GL_LINES,2,GL_UNSIGNED_INT,branchIndexes);
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);	
