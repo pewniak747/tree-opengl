@@ -7,6 +7,7 @@ class Branch {
   public:
     Branch(Tree *t, float x,  int y);
     float length();
+    float radius();
     std::vector<int> parents();
     float created_at;
     float angle;

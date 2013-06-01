@@ -23,6 +23,10 @@ float Branch::length() {
   //return 1.0f;
 }
 
+float Branch::radius() {
+  return log(1+(tree->clock - created_at)/(40*(level+1)));
+}
+
 std::vector<int> Branch::parents() {
   std::vector<int> result;
   int par = parent;

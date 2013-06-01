@@ -23,8 +23,8 @@ void displayFrame(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 	glm::mat4 V=glm::lookAt(
-		glm::vec3(-4.0f,-4.0f,-10.0f),
-		glm::vec3(0.0f,5.0f,0.0f),
+		glm::vec3(0.0f,4.0f,-10.0f),
+		glm::vec3(0.0f,4.0f,0.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	
 	glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
@@ -36,6 +36,7 @@ void displayFrame(void) {
   Branch *branch;
 
   for(int i = 0; i < tree->branchCount(); i++) {
+  //for(int i = 0; i < std::min(1, tree->branchCount()); i++) {
     branch = tree->getBranch(i);
     glm::mat4 M=glm::mat4(1.0f);
     M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
@@ -49,13 +50,32 @@ void displayFrame(void) {
     M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
     glLoadMatrixf(glm::value_ptr(V*M));
 
+    float radius = branch->radius()/2;
+    float length = branch->length();
     float branchVertices[] = {
-      0, 0, 0,
-      0, branch->length(), 0
+      -radius, 0, -radius,
+      -radius, 0,  radius,
+      radius, 0, radius,
+      radius, 0, -radius,
+      -radius, length, -radius,
+      -radius, length, radius,
+      radius, length, radius,
+      radius, length, -radius
     };
 
     int branchIndexes[] = {
-      0, 1 
+      0, 1,
+      1, 2,
+      2, 3,
+      3, 0,
+      4, 5,
+      5, 6,
+      6, 7,
+      7, 4,
+      0, 4,
+      1, 5,
+      2, 6,
+      3, 7
     };
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -63,7 +83,7 @@ void displayFrame(void) {
     glVertexPointer(3,GL_FLOAT,0,branchVertices);
     //glColorPointer(3,GL_FLOAT,0,cubeColors);	
 
-    glDrawElements(GL_LINES,2,GL_UNSIGNED_INT,branchIndexes);
+    glDrawElements(GL_LINES,24,GL_UNSIGNED_INT,branchIndexes);
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);	
