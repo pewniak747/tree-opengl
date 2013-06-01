@@ -11,7 +11,7 @@
 #include "branch.h"
 
 float speed_x=0;
-float speed_y=100;
+float speed_y=20;
 int lastTime=0;
 float angle_x;
 float angle_y;
@@ -23,11 +23,11 @@ void displayFrame(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 	glm::mat4 V=glm::lookAt(
-		glm::vec3(0.0f,0.0f,-10.0f),
-		glm::vec3(0.0f,0.0f,0.0f),
+		glm::vec3(-4.0f,-4.0f,-10.0f),
+		glm::vec3(0.0f,5.0f,0.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	
-	glm::mat4 P=glm::perspective(100.0f, 1.0f, 1.0f, 50.0f);
+	glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(P));
