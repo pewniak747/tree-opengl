@@ -33,6 +33,9 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 
   float radius = branch->radius()/2;
   float length = branch->length();
+
+  // draw cuboids
+  /*
   float branchVertices[] = {
     -radius, 0, -radius,
     -radius, 0,  radius,
@@ -45,18 +48,24 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   };
 
   int branchIndexes[] = {
-    0, 1,
-    1, 2,
-    2, 3,
-    3, 0,
-    4, 5,
-    5, 6,
-    6, 7,
-    7, 4,
-    0, 4,
-    1, 5,
-    2, 6,
-    3, 7
+    // top
+    0, 1, 2,
+    2, 3, 0,
+    // bottom
+    4, 5, 6,
+    6, 7, 4,
+    // left
+    0, 1, 4,
+    4, 5, 1,
+    // right
+    2, 3, 6,
+    6, 7, 3,
+    // front
+    1, 2, 5,
+    5, 6, 2,
+    // back
+    2, 3, 6,
+    6, 7, 3
   };
 
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -64,7 +73,21 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   glVertexPointer(3,GL_FLOAT,0,branchVertices);
   //glColorPointer(3,GL_FLOAT,0,cubeColors);	
 
-  glDrawElements(GL_LINES,24,GL_UNSIGNED_INT,branchIndexes);
+  glDrawElements(GL_TRIANGLES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
+  */
+
+  // draw lines
+  float branchVertices[] = {
+    0, 0, 0,
+    0, length, 0
+  };
+  int branchIndexes[] = {
+    0, 1
+  };
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glVertexPointer(3,GL_FLOAT,0,branchVertices);
+  glDrawElements(GL_LINES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
+
 
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);	
