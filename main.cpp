@@ -18,6 +18,58 @@ float angle_y;
 
 Tree *tree = new Tree();
 
+void drawBranch(Branch *branch, const glm::mat4 V) {
+  glm::mat4 M=glm::mat4(1.0f);
+  M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
+  std::vector<int> parents = branch->parents();
+  for(int l = parents.size()-1; l >= 0; l--) {
+    M=glm::rotate(M, tree->getBranch(parents[l])->direction, glm::vec3(0.0f, 1.0f, 0.0f));
+    M=glm::rotate(M, tree->getBranch(parents[l])->angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    M=glm::translate(M, glm::vec3(0.0f, tree->getBranch(parents[l])->length(), 0.0f));
+  }
+  M=glm::rotate(M, branch->direction, glm::vec3(0.0f, 1.0f, 0.0f));
+  M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
+  glLoadMatrixf(glm::value_ptr(V*M));
+
+  float radius = branch->radius()/2;
+  float length = branch->length();
+  float branchVertices[] = {
+    -radius, 0, -radius,
+    -radius, 0,  radius,
+    radius, 0, radius,
+    radius, 0, -radius,
+    -radius, length, -radius,
+    -radius, length, radius,
+    radius, length, radius,
+    radius, length, -radius
+  };
+
+  int branchIndexes[] = {
+    0, 1,
+    1, 2,
+    2, 3,
+    3, 0,
+    4, 5,
+    5, 6,
+    6, 7,
+    7, 4,
+    0, 4,
+    1, 5,
+    2, 6,
+    3, 7
+  };
+
+  glEnableClientState(GL_VERTEX_ARRAY);
+  //glEnableClientState(GL_COLOR_ARRAY);
+  glVertexPointer(3,GL_FLOAT,0,branchVertices);
+  //glColorPointer(3,GL_FLOAT,0,cubeColors);	
+
+  glDrawElements(GL_LINES,24,GL_UNSIGNED_INT,branchIndexes);
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_COLOR_ARRAY);	
+}
+
 void displayFrame(void) {
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -33,60 +85,9 @@ void displayFrame(void) {
 	glLoadMatrixf(glm::value_ptr(P));
 	glMatrixMode(GL_MODELVIEW);
 	
-  Branch *branch;
-
-  for(int i = 0; i < tree->branchCount(); i++) {
   //for(int i = 0; i < std::min(1, tree->branchCount()); i++) {
-    branch = tree->getBranch(i);
-    glm::mat4 M=glm::mat4(1.0f);
-    M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
-    std::vector<int> parents = branch->parents();
-    for(int l = parents.size()-1; l >= 0; l--) {
-      M=glm::rotate(M, tree->getBranch(parents[l])->direction, glm::vec3(0.0f, 1.0f, 0.0f));
-      M=glm::rotate(M, tree->getBranch(parents[l])->angle, glm::vec3(0.0f, 0.0f, 1.0f));
-      M=glm::translate(M, glm::vec3(0.0f, tree->getBranch(parents[l])->length(), 0.0f));
-    }
-    M=glm::rotate(M, branch->direction, glm::vec3(0.0f, 1.0f, 0.0f));
-    M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
-    glLoadMatrixf(glm::value_ptr(V*M));
-
-    float radius = branch->radius()/2;
-    float length = branch->length();
-    float branchVertices[] = {
-      -radius, 0, -radius,
-      -radius, 0,  radius,
-      radius, 0, radius,
-      radius, 0, -radius,
-      -radius, length, -radius,
-      -radius, length, radius,
-      radius, length, radius,
-      radius, length, -radius
-    };
-
-    int branchIndexes[] = {
-      0, 1,
-      1, 2,
-      2, 3,
-      3, 0,
-      4, 5,
-      5, 6,
-      6, 7,
-      7, 4,
-      0, 4,
-      1, 5,
-      2, 6,
-      3, 7
-    };
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    //glEnableClientState(GL_COLOR_ARRAY);
-    glVertexPointer(3,GL_FLOAT,0,branchVertices);
-    //glColorPointer(3,GL_FLOAT,0,cubeColors);	
-
-    glDrawElements(GL_LINES,24,GL_UNSIGNED_INT,branchIndexes);
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);	
+  for(int i = 0; i < tree->branchCount(); i++) {
+    drawBranch(tree->getBranch(i), V);
   }
 		
 	glutSwapBuffers();
@@ -152,7 +153,7 @@ int main(int argc, char* argv[]) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800,800);
 	glutInitWindowPosition(0,0);
-	glutCreateWindow("Program OpenGL");        
+	glutCreateWindow("Growing Tree Simulation");        
 	glutDisplayFunc(displayFrame);
 	glutIdleFunc(nextFrame);
 
