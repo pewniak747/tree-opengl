@@ -32,6 +32,6 @@ void Tree::addBranch() {
     int choosenBranch = candidateBranches[rand() % candidateBranches.size()];
     newBranch = new Branch(this, clock, choosenBranch);
   }
-  printf("Created branch: id = %d, parent = %d, level = %d.\n", branches.size(), newBranch->parent, newBranch->level);
+  printf("Created branch: id = %d, parent = %d, level = %d.\n", branchCount(), newBranch->parent, newBranch->level);
   branches.push_back(newBranch);
 }
