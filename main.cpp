@@ -25,8 +25,11 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   for(int l = parents.size()-1; l >= 0; l--) {
     M=glm::rotate(M, tree->getBranch(parents[l])->direction, glm::vec3(0.0f, 1.0f, 0.0f));
     M=glm::rotate(M, tree->getBranch(parents[l])->angle, glm::vec3(0.0f, 0.0f, 1.0f));
-    M=glm::translate(M, glm::vec3(0.0f, tree->getBranch(parents[l])->length(), 0.0f));
+    if(l > 0)
+      M=glm::translate(M, glm::vec3(0.0f, tree->getBranch(parents[l-1])->rootDistance(), 0.0f));
   }
+  if(branch->parent >= 0)
+    M=glm::translate(M, glm::vec3(0.0f, branch->rootDistance(), 0.0f));
   M=glm::rotate(M, branch->direction, glm::vec3(0.0f, 1.0f, 0.0f));
   M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
@@ -96,7 +99,7 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 void displayFrame(void) {
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 	glm::mat4 V=glm::lookAt(
 		glm::vec3(0.0f,4.0f,-10.0f),
 		glm::vec3(0.0f,4.0f,0.0f),
