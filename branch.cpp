@@ -20,7 +20,7 @@ Branch::Branch(Tree *t, float x, int y) {
 }
 
 float Branch::length() {
-  return log(1+(tree->clock - created_at)/10);
+  return log(1+(tree->clock - created_at)/10/(1+level));
   //return 1.0f;
 }
 
