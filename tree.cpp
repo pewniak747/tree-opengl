@@ -7,56 +7,16 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "tga.h"
 #include "cube.h"
+#include "tree.h"
+#include "branch.h"
 
 float speed_x=0;
 float speed_y=100;
 int lastTime=0;
 float angle_x;
 float angle_y;
-float elapsed_time = 0;
 
-class Branch {
-  public:
-    Branch(float x,  int y);
-    float length();
-    std::vector<int> parents();
-    float created_at;
-    float angle;
-    float direction;
-    int parent;
-    int level;
-};
-
-std::vector<Branch> branches;
-
-Branch::Branch(float x, int y) {
-  created_at = x;
-  parent = y;
-  angle = (rand() % 180 - 90);
-  direction = rand() % 360;
-  if(parent >= 0) {
-    level = branches[parent].level + 1;
-  }
-  else level = 0;
-  //angle = 45;
-  //direction = 0;
-}
-
-float Branch::length() {
-  return log(1+(elapsed_time - created_at)/10);
-  //return 1.0f;
-}
-
-std::vector<int> Branch::parents() {
-  std::vector<int> result;
-  int par = parent;
-  while(par >= 0) {
-    result.push_back(par);
-    par = branches[par].parent;
-  }
-  return result;
-}
-
+Tree *tree = new Tree();
 
 void displayFrame(void) {
 	glClearColor(0,0,0,1);
@@ -75,15 +35,15 @@ void displayFrame(void) {
 	
   Branch *branch;
 
-  for(int i = 0; i < branches.size(); i++) {
-    branch = &branches[i];
+  for(int i = 0; i < tree->branchCount(); i++) {
+    branch = tree->getBranch(i);
     glm::mat4 M=glm::mat4(1.0f);
     M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
     std::vector<int> parents = branch->parents();
     for(int l = parents.size()-1; l >= 0; l--) {
-      M=glm::rotate(M, branches[parents[l]].direction, glm::vec3(0.0f, 1.0f, 0.0f));
-      M=glm::rotate(M, branches[parents[l]].angle, glm::vec3(0.0f, 0.0f, 1.0f));
-      M=glm::translate(M, glm::vec3(0.0f, branches[parents[l]].length(), 0.0f));
+      M=glm::rotate(M, tree->getBranch(parents[l])->direction, glm::vec3(0.0f, 1.0f, 0.0f));
+      M=glm::rotate(M, tree->getBranch(parents[l])->angle, glm::vec3(0.0f, 0.0f, 1.0f));
+      M=glm::translate(M, glm::vec3(0.0f, tree->getBranch(parents[l])->length(), 0.0f));
     }
     M=glm::rotate(M, branch->direction, glm::vec3(0.0f, 1.0f, 0.0f));
     M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -107,29 +67,6 @@ void displayFrame(void) {
 	glutSwapBuffers();
 }
 
-void addBranch() {
-  Branch *newBranch;
-  if(branches.size() == 0) {
-    newBranch = new Branch(elapsed_time, -1);
-    newBranch->direction = 0;
-    newBranch->angle = 0;
-  }
-  else {
-    int maxLevel = 0;
-    for(int i = 0; i < branches.size(); i++)
-      if(branches[i].level > maxLevel) maxLevel = branches[i].level;
-    if(maxLevel > 3) maxLevel = 3;
-    int randLevel = rand() % (maxLevel+1);
-    std::vector<int> candidateBranches;
-    for(int i = 0; i < branches.size(); i++)
-      if(branches[i].level == randLevel) candidateBranches.push_back(i);
-    int choosenBranch = candidateBranches[rand() % candidateBranches.size()];
-    newBranch = new Branch(elapsed_time, choosenBranch);
-  }
-  printf("Created branch: id = %d, parent = %d, level = %d.\n", branches.size(), newBranch->parent, newBranch->level);
-  branches.push_back(*newBranch);
-}
-
 void nextFrame(void) {
 	int actTime=glutGet(GLUT_ELAPSED_TIME);
 	int interval=actTime-lastTime;
@@ -140,10 +77,10 @@ void nextFrame(void) {
 	if (angle_x>360) angle_x+=360;
 	if (angle_y>360) angle_y-=360;
 	if (angle_y>360) angle_y+=360;
-  elapsed_time += 0.001;
+  tree->clock += 0.001;
 
   if(rand() % 200 == 0) {
-    addBranch();
+    tree->addBranch();
   }
 	
 	glutPostRedisplay();
