@@ -10,8 +10,8 @@
 #include "tree.h"
 #include "branch.h"
 
-float speed_x=0;
 float speed_y=20;
+float cameraHeight = 4.0f;
 int lastTime=0;
 float angle_x;
 float angle_y;
@@ -91,7 +91,6 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   glVertexPointer(3,GL_FLOAT,0,branchVertices);
   glDrawElements(GL_LINES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
 
-
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);	
 }
@@ -133,7 +132,7 @@ void displayFrame(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V=glm::lookAt(
-		glm::vec3(0.0f,4.0f,-10.0f),
+		glm::vec3(0.0f,cameraHeight,-10.0f),
 		glm::vec3(0.0f,4.0f,0.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
 	
@@ -157,7 +156,6 @@ void nextFrame(void) {
 	int actTime=glutGet(GLUT_ELAPSED_TIME);
 	int interval=actTime-lastTime;
 	lastTime=actTime;
-	angle_x+=speed_x*interval/1000.0;
 	angle_y+=speed_y*interval/1000.0;
 	if (angle_x>360) angle_x-=360;
 	if (angle_x>360) angle_x+=360;
@@ -181,10 +179,10 @@ void keyDown(int c, int x, int y) {
       speed_y=-60;
       break;
     case GLUT_KEY_UP: 
-      speed_x=60;
+      if(cameraHeight < 10) cameraHeight += 0.1;
       break;
     case GLUT_KEY_DOWN:
-      speed_x=-60;
+      if(cameraHeight > 0) cameraHeight -= 0.1;
       break;  
   }
 }
@@ -198,10 +196,8 @@ void keyUp(int c, int x, int y) {
       speed_y=-0;
       break;
     case GLUT_KEY_UP: 
-      speed_x=0;
       break;
     case GLUT_KEY_DOWN:
-      speed_x=-0;
       break;  
   }
 }
