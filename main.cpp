@@ -96,6 +96,38 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   glDisableClientState(GL_COLOR_ARRAY);	
 }
 
+void drawGround(const glm::mat4 V) {
+  glm::mat4 M=glm::mat4(1.0f);
+  M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
+  glLoadMatrixf(glm::value_ptr(V*M));
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
+
+  float groundRadius = 1.0f;
+  float groundVertices[] = {
+    -groundRadius, 0, -groundRadius,
+    -groundRadius, 0, groundRadius,
+    groundRadius, 0, groundRadius,
+    groundRadius, 0, -groundRadius
+  };
+  int groundIndexes[] = {
+    0, 1, 2,
+    2, 3, 0
+  };
+  float groundColors[] = {
+    0, 1, 0,
+    0, 1, 0,
+    0, 1, 0,
+    0, 1, 0
+  };
+  glVertexPointer(3,GL_FLOAT,0,groundVertices);
+  glColorPointer(3, GL_FLOAT, 0, groundColors);
+  glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_COLOR_ARRAY);
+}
+
 void displayFrame(void) {
 	glClearColor(0,0,0,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -116,6 +148,8 @@ void displayFrame(void) {
     drawBranch(tree->getBranch(i), V);
   }
 		
+  drawGround(V);
+
 	glutSwapBuffers();
 }
 
