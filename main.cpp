@@ -16,7 +16,27 @@ int lastTime=0;
 float angle_x;
 float angle_y;
 
+GLuint grassTexture;
+TGAImg image;
+
 Tree *tree = new Tree();
+
+void loadTexture(char *filename, GLuint *handle) {
+  printf("Loading texture %s\n", filename);
+  if (image.Load(filename)==IMG_OK) {
+    glGenTextures(1,handle);
+    glBindTexture(GL_TEXTURE_2D,*handle);
+    if (image.GetBPP()==24)
+      glTexImage2D(GL_TEXTURE_2D,0,3,image.GetWidth(),image.GetHeight(),0, GL_RGB,GL_UNSIGNED_BYTE,image.GetImg());
+    else if (image.GetBPP()==32)
+      glTexImage2D(GL_TEXTURE_2D,0,4,image.GetWidth(),image.GetHeight(),0, GL_RGBA,GL_UNSIGNED_BYTE,image.GetImg());
+    else
+      printf("Error loading texture %s\n", filename);
+  }
+  else {
+    printf("Error loading texture %s\n", filename);
+  }
+}
 
 void drawBranch(Branch *branch, const glm::mat4 V) {
   glm::mat4 M=glm::mat4(1.0f);
@@ -99,8 +119,15 @@ void drawGround(const glm::mat4 V) {
   glm::mat4 M=glm::mat4(1.0f);
   M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
+  glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
-  glEnableClientState(GL_COLOR_ARRAY);
+  //glEnableClientState(GL_COLOR_ARRAY);
+  glEnable(GL_TEXTURE_2D);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   float groundRadius = 1.0f;
   float groundVertices[] = {
@@ -119,12 +146,22 @@ void drawGround(const glm::mat4 V) {
     0, 1, 0,
     0, 1, 0
   };
+  float textureScale = 0.5f;
+  float textureCoords[] = {
+    0, 0,
+    textureScale, 0,
+    textureScale, textureScale,
+    0, textureScale
+  };
   glVertexPointer(3,GL_FLOAT,0,groundVertices);
-  glColorPointer(3, GL_FLOAT, 0, groundColors);
+  //glColorPointer(3, GL_FLOAT, 0, groundColors);
+  glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
   glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
 
+  glDisable(GL_TEXTURE_2D);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
-  glDisableClientState(GL_COLOR_ARRAY);
+  //glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void displayFrame(void) {
@@ -217,10 +254,10 @@ int main(int argc, char* argv[]) {
 	glutSpecialFunc(keyDown);
 	glutSpecialUpFunc(keyUp);
 	
-	
 	//glEnable(GL_LIGHTING);
 	//glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
+  loadTexture("grass.tga", &grassTexture);
 
   glutMainLoop();
   return 0;
