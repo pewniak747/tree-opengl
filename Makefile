@@ -8,10 +8,11 @@ OBJECTS=$(SOURCES:.cpp=.o)
 all: tree
 
 tree: $(OBJECTS) 
-	$(CC) -o $@ $(OBJECTS) $(LIBS)
+	$(CC) -o $@ $(addprefix bin/, $(OBJECTS)) $(LIBS)
 
-$(OBJECTS): %.o: %.cpp $(HEADERS)
-	$(CC) -c $< -o $@
+$(OBJECTS): %.o: src/%.cpp $(addprefix src/, $(HEADERS))
+	mkdir -p bin/
+	$(CC) -c $< -o bin/$@
 	
 clean:
-	-rm -rf *.o tree
+	rm -rf bin/ tree

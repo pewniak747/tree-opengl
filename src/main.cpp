@@ -6,7 +6,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "tga.h"
-#include "cube.h"
 #include "tree.h"
 #include "branch.h"
 
@@ -257,7 +256,7 @@ int main(int argc, char* argv[]) {
 	//glEnable(GL_LIGHTING);
 	//glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
-  loadTexture("grass.tga", &grassTexture);
+  loadTexture("res/grass.tga", &grassTexture);
 
   glutMainLoop();
   return 0;
