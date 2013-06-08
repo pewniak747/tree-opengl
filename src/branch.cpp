@@ -33,7 +33,7 @@ float Branch::radius() {
     float parentRadius = parentBranch()->radius();
     float parentLength = parentBranch()->length();
     float distance = rootDistance();
-    float allowedRadius = (sqrt(pow(parentRadius, 2)+pow(distance, 2))*parentRadius)/sqrt(pow(parentRadius, 2)+pow(parentLength, 2));
+    float allowedRadius = ((parentLength-distance)*parentRadius)/sqrt(pow(parentRadius, 2)+pow(parentLength, 2));
     return std::min(baseRadius, allowedRadius);
   }
 }
