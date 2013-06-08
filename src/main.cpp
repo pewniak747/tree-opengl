@@ -18,6 +18,7 @@ float angle_y;
 
 GLuint grassTexture;
 GLuint branchTexture;
+GLuint leafTexture;
 TGAImg image;
 
 Tree *tree = new Tree();
@@ -130,7 +131,11 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
     glm::mat4 lM = M;
     lM = glm::translate(lM, glm::vec3(0.0f, 0.0f, branch->leaves[i]->rootDistance()));
     glLoadMatrixf(glm::value_ptr(V*lM));
-    glutWireSphere(branch->leaves[i]->length(), 10, 10);
+    glBindTexture(GL_TEXTURE_2D,leafTexture);
+    GLUquadric *qobj = gluNewQuadric(); 
+    gluQuadricTexture(qobj,GL_TRUE); 
+    gluSphere(qobj,branch->leaves[i]->length(), 10, 10); 
+    gluDeleteQuadric(qobj); 
   }
 
   glDisableClientState(GL_VERTEX_ARRAY);
@@ -291,6 +296,7 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
   loadTexture("res/grass.tga", &grassTexture);
   loadTexture("res/branch.tga", &branchTexture);
+  loadTexture("res/leaf.tga", &leafTexture);
 
   glutMainLoop();
   return 0;
