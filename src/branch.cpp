@@ -8,7 +8,7 @@ Branch::Branch(Tree *t, float x, int y) {
   parent = y;
   tree = t;
   angle = (rand() % 180 - 90);
-  rootDistanceParameter = (rand() % 100 + 100.0f) / 200.0f;
+  rootDistanceParameter = (rand() % 100 + 50.0f) / 200.0f;
   direction = rand() % 360;
   if(parent >= 0) {
     level = tree->getBranch(parent)->level + 1;
@@ -25,7 +25,7 @@ float Branch::length() {
 }
 
 float Branch::radius() {
-  return log(1+(tree->clock - created_at)/(40*(level+1)));
+  return log(1+(tree->clock - created_at)/(50*(level+1)));
 }
 
 float Branch::rootDistance() {

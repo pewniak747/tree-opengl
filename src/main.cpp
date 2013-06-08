@@ -51,6 +51,7 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
     M=glm::translate(M, glm::vec3(0.0f, branch->rootDistance(), 0.0f));
   M=glm::rotate(M, branch->direction, glm::vec3(0.0f, 1.0f, 0.0f));
   M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
+  M=glm::rotate(M, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
 
   float radius = branch->radius()/2;
@@ -106,12 +107,13 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   int branchIndexes[] = {
     0, 1
   };
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glVertexPointer(3,GL_FLOAT,0,branchVertices);
-  glDrawElements(GL_LINES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
+  //glEnableClientState(GL_VERTEX_ARRAY);
+  //glVertexPointer(3,GL_FLOAT,0,branchVertices);
+  //glDrawElements(GL_LINES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
+  glutSolidCone(radius, length, 10, 10);
 
   glDisableClientState(GL_VERTEX_ARRAY);
-  glDisableClientState(GL_COLOR_ARRAY);	
+  glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void drawGround(const glm::mat4 V) {
@@ -253,8 +255,8 @@ int main(int argc, char* argv[]) {
 	glutSpecialFunc(keyDown);
 	glutSpecialUpFunc(keyUp);
 	
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
   loadTexture("res/grass.tga", &grassTexture);
 
