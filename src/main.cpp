@@ -117,8 +117,10 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 }
 
 void drawGround(const glm::mat4 V) {
+  float groundRadius = 10.0f;
   glm::mat4 M=glm::mat4(1.0f);
   M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
+  M=glm::translate(M, glm::vec3(0.0f, -groundRadius, 0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
   glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -130,7 +132,6 @@ void drawGround(const glm::mat4 V) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-  float groundRadius = 1.0f;
   float groundVertices[] = {
     -groundRadius, 0, -groundRadius,
     -groundRadius, 0, groundRadius,
@@ -157,7 +158,8 @@ void drawGround(const glm::mat4 V) {
   glVertexPointer(3,GL_FLOAT,0,groundVertices);
   //glColorPointer(3, GL_FLOAT, 0, groundColors);
   glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
-  glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
+  //glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
+  glutSolidSphere(groundRadius, 50, 50);
 
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -255,8 +257,8 @@ int main(int argc, char* argv[]) {
 	glutSpecialFunc(keyDown);
 	glutSpecialUpFunc(keyUp);
 	
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
   loadTexture("res/grass.tga", &grassTexture);
 
