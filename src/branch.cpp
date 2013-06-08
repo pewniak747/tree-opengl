@@ -21,7 +21,7 @@ float Branch::length() {
 }
 
 float Branch::radius() {
-  return log(1+age()/(100*(level+1)));
+  return log(1+age()/(200*(level+1)));
 }
 
 float Branch::age() {

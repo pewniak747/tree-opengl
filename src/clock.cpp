@@ -2,7 +2,7 @@
 
 Clock::Clock() {
   value = 0.0f;
-  speed = 0.005f;
+  speed = 0.015f;
 }
 
 void Clock::tick() {
