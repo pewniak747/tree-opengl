@@ -9,6 +9,7 @@ class Branch {
     float length();
     float radius();
     float rootDistance();
+    float age();
     std::vector<int> parents();
     float created_at;
     float angle;
