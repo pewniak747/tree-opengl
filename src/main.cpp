@@ -110,7 +110,7 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   //glEnableClientState(GL_VERTEX_ARRAY);
   //glVertexPointer(3,GL_FLOAT,0,branchVertices);
   //glDrawElements(GL_LINES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
-  glutSolidCone(radius, length, 10, 10);
+  glutSolidCone(radius, length, 30, 30);
 
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
@@ -261,8 +261,8 @@ int main(int argc, char* argv[]) {
 	glutSpecialFunc(keyDown);
 	glutSpecialUpFunc(keyUp);
 	
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
   loadTexture("res/grass.tga", &grassTexture);
 
