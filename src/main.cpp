@@ -16,6 +16,7 @@ float angle_x;
 float angle_y;
 
 GLuint grassTexture;
+GLuint branchTexture;
 TGAImg image;
 
 Tree *tree = new Tree();
@@ -53,6 +54,12 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   M=glm::rotate(M, branch->angle, glm::vec3(0.0f, 0.0f, 1.0f));
   M=glm::rotate(M, -90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
+  glEnable(GL_TEXTURE_2D);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   float radius = branch->radius()/2;
   float length = branch->length();
@@ -110,10 +117,16 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   //glEnableClientState(GL_VERTEX_ARRAY);
   //glVertexPointer(3,GL_FLOAT,0,branchVertices);
   //glDrawElements(GL_LINES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
-  glutSolidCone(radius, length, 30, 30);
+  //glutSolidCone(radius, length, 30, 30);
+  glBindTexture(GL_TEXTURE_2D,branchTexture);
+
+  GLUquadric *qobj = gluNewQuadric(); 
+  gluQuadricTexture(qobj,GL_TRUE); 
+  gluCylinder(qobj,radius, 0, length,50,50); 
+  gluDeleteQuadric(qobj); 
 
   glDisableClientState(GL_VERTEX_ARRAY);
-  glDisableClientState(GL_COLOR_ARRAY);
+  glDisable(GL_TEXTURE_2D);
 }
 
 void drawGround(const glm::mat4 V) {
@@ -207,7 +220,7 @@ void nextFrame(void) {
 	if (angle_y>360) angle_y+=360;
   tree->clock->tick();
 
-  if(int(tree->clock->value * 1000) % 200 == 0) {
+  if(int(tree->clock->value * 1000) % 300 == 0) {
     tree->addBranch();
   }
 	
@@ -265,6 +278,7 @@ int main(int argc, char* argv[]) {
 	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
   loadTexture("res/grass.tga", &grassTexture);
+  loadTexture("res/branch.tga", &branchTexture);
 
   glutMainLoop();
   return 0;
