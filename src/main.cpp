@@ -143,7 +143,7 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 }
 
 void drawGround(const glm::mat4 V) {
-  float groundRadius = 2.0f;
+  float groundRadius = 3.0f;
   glm::mat4 M=glm::mat4(1.0f);
   M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
   M=glm::translate(M, glm::vec3(0.0f, -groundRadius+0.1f, 0.0f));
@@ -233,7 +233,7 @@ void nextFrame(void) {
 	if (angle_y>360) angle_y+=360;
   tree->clock->tick();
 
-  if(int(tree->clock->value * 1000) % 300 == 0) {
+  if(int(tree->clock->value * 1000) % 200 == 0) {
     tree->addBranch();
   }
 
