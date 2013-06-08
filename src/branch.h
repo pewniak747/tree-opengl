@@ -10,6 +10,7 @@ class Branch {
     float radius();
     float rootDistance();
     float age();
+    bool isTrunk();
     std::vector<int> parents();
     float created_at;
     float angle;
@@ -21,6 +22,7 @@ class Branch {
     Tree *tree;
     float lengthAt(float time);
     float radiusAt(float time);
+    Branch *parentBranch();
 };
 
 #endif // BRANCH_H

@@ -11,7 +11,7 @@ Branch::Branch(Tree *t, float x, int y) {
   rootDistanceParameter = (rand() % 100 + 50.0f) / 200.0f;
   direction = rand() % 360;
   if(parent >= 0) {
-    level = tree->getBranch(parent)->level + 1;
+    level = parentBranch()->level + 1;
   }
   else level = 0;
 }
@@ -20,8 +20,26 @@ float Branch::length() {
   return lengthAt(age());
 }
 
+bool Branch::isTrunk() {
+  return parent == -1;
+}
+
 float Branch::radius() {
-  return radiusAt(age());
+  float baseRadius = radiusAt(age());
+  if(isTrunk()) {
+    return baseRadius;
+  }
+  else {
+    float parentRadius = parentBranch()->radius();
+    float parentLength = parentBranch()->length();
+    float distance = rootDistance();
+    float allowedRadius = (sqrt(pow(parentRadius, 2)+pow(distance, 2))*parentRadius)/sqrt(pow(parentRadius, 2)+pow(parentLength, 2));
+    return std::min(baseRadius, allowedRadius);
+  }
+}
+
+Branch* Branch::parentBranch() {
+  return tree->getBranch(parent);
 }
 
 float Branch::age() {
@@ -34,7 +52,7 @@ float Branch::rootDistance() {
 }
 
 float Branch::lengthAt(float time) {
-  return log(1+time/(10*(1+level)));
+  return log(1+time/(10*(level+1)));
 }
 
 float Branch::radiusAt(float time) {
