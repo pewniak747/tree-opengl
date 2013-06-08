@@ -8,10 +8,12 @@ class Leaf {
     Leaf(Tree *tree, Branch *branch);
     float length();
     float rootDistance();
+    float age();
   private:
     Tree *tree;
     Branch *branch;
     float rootDistanceParameter;
+    float created_at;
 };
 
 #endif // LEAF_H
