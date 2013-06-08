@@ -1,7 +1,11 @@
 #ifndef BRANCH_H
 #define BRANCH_H
 
+#include<vector>
+
 class Tree;
+
+class Leaf;
 
 class Branch {
   public:
@@ -12,12 +16,14 @@ class Branch {
     float age();
     bool isTrunk();
     std::vector<int> parents();
+    std::vector<Leaf*> leaves;
     float created_at;
     float angle;
     float rootDistanceParameter;
     float direction;
     int parent;
     int level;
+    void addLeaf();
   private:
     Tree *tree;
     float lengthAt(float time);

@@ -8,6 +8,7 @@
 #include "tga.h"
 #include "tree.h"
 #include "branch.h"
+#include "leaf.h"
 
 float speed_y=20;
 float cameraHeight = 4.0f;
@@ -125,6 +126,13 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   gluCylinder(qobj,radius, 0, length,50,50); 
   gluDeleteQuadric(qobj); 
 
+  for(int i = 0; i < branch->leaves.size(); i++) {
+    glm::mat4 lM = M;
+    lM = glm::translate(lM, glm::vec3(0.0f, 0.0f, branch->leaves[i]->rootDistance()));
+    glLoadMatrixf(glm::value_ptr(V*lM));
+    glutWireSphere(branch->leaves[i]->length(), 10, 10);
+  }
+
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
 }
@@ -222,6 +230,10 @@ void nextFrame(void) {
 
   if(int(tree->clock->value * 1000) % 300 == 0) {
     tree->addBranch();
+  }
+
+  if(tree->branchCount() > 1 && int(tree->clock->value * 1000) % 10 == 0) {
+    tree->getBranch(rand() % tree->branchCount())->addLeaf();
   }
 	
 	glutPostRedisplay();

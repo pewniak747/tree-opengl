@@ -2,6 +2,7 @@
 #include<math.h>
 #include "branch.h"
 #include "tree.h"
+#include "leaf.h"
 
 Branch::Branch(Tree *t, float x, int y) {
   created_at = x;
@@ -67,4 +68,12 @@ std::vector<int> Branch::parents() {
     par = tree->getBranch(par)->parent;
   }
   return result;
+}
+
+void Branch::addLeaf() {
+  if(level > 2) {
+    Leaf *newLeaf = new Leaf(tree, this);
+    leaves.push_back(newLeaf);
+    printf("Created leaf: id = %d, branch = %d\n", leaves.size(), 0);
+  }
 }

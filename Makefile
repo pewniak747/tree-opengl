@@ -1,8 +1,8 @@
 LIBS=-framework OpenGL -framework GLUT -lGLEW
 CC=g++ -I/opt/local/include -L/opt/local/lib -g
 
-SOURCES=main.cpp tree.cpp branch.cpp tga.cpp clock.cpp
-HEADERS=tree.h branch.h tga.h clock.h
+SOURCES=main.cpp tree.cpp branch.cpp tga.cpp clock.cpp leaf.cpp
+HEADERS=tree.h branch.h tga.h clock.h leaf.h
 OBJECTS=$(SOURCES:.cpp=.o)
 
 all: tree
