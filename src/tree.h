@@ -3,6 +3,8 @@
 
 #include<vector>
 
+#include "clock.h"
+
 class Branch;
 
 class Tree {
@@ -11,7 +13,7 @@ class Tree {
     Branch* getBranch(int x);
     void addBranch();
     int branchCount();
-    float clock;
+    Clock *clock;
   private:
     std::vector<Branch*> branches;
 };

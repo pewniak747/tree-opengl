@@ -25,7 +25,7 @@ float Branch::radius() {
 }
 
 float Branch::age() {
-  return tree->clock - created_at;
+  return tree->clock->from(created_at);
 }
 
 float Branch::rootDistance() {

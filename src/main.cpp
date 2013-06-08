@@ -201,7 +201,7 @@ void nextFrame(void) {
 	if (angle_x>360) angle_x+=360;
 	if (angle_y>360) angle_y-=360;
 	if (angle_y>360) angle_y+=360;
-  tree->clock += 0.001;
+  tree->clock->tick();
 
   if(rand() % 200 == 0) {
     tree->addBranch();
