@@ -19,6 +19,8 @@ class Branch {
     int level;
   private:
     Tree *tree;
+    float lengthAt(float time);
+    float radiusAt(float time);
 };
 
 #endif // BRANCH_H
