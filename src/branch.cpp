@@ -14,14 +14,10 @@ Branch::Branch(Tree *t, float x, int y) {
     level = tree->getBranch(parent)->level + 1;
   }
   else level = 0;
-  
-  //angle = 45;
-  //direction = 0;
 }
 
 float Branch::length() {
   return log(1+age()/(10*(1+level)));
-  //return 1.0f;
 }
 
 float Branch::radius() {
@@ -35,8 +31,6 @@ float Branch::age() {
 float Branch::rootDistance() {
   float parentLength = tree->getBranch(parent)->length();
   return rootDistanceParameter * parentLength;
-  //float dynamicLength = log(1+(tree->clock - tree->getBranch(parent)->created_at)/10);
-  //return std::min(parentLength, dynamicLength);
 }
 
 std::vector<int> Branch::parents() {
@@ -48,4 +42,3 @@ std::vector<int> Branch::parents() {
   }
   return result;
 }
-
