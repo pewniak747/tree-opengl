@@ -117,10 +117,10 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 }
 
 void drawGround(const glm::mat4 V) {
-  float groundRadius = 10.0f;
+  float groundRadius = 1.0f;
   glm::mat4 M=glm::mat4(1.0f);
   M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
-  M=glm::translate(M, glm::vec3(0.0f, -groundRadius, 0.0f));
+  M=glm::translate(M, glm::vec3(0.0f, -groundRadius+0.1f, 0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
   glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -159,7 +159,11 @@ void drawGround(const glm::mat4 V) {
   //glColorPointer(3, GL_FLOAT, 0, groundColors);
   glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
   //glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
-  glutSolidSphere(groundRadius, 50, 50);
+
+  GLUquadric *qobj = gluNewQuadric(); 
+  gluQuadricTexture(qobj,GL_TRUE); 
+  gluSphere(qobj,groundRadius,50,50); 
+  gluDeleteQuadric(qobj); 
 
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
