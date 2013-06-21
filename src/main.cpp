@@ -127,6 +127,7 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   gluCylinder(qobj,radius, 0, length,50,50); 
   gluDeleteQuadric(qobj); 
 
+  /*
   for(int i = 0; i < branch->leaves.size(); i++) {
     glm::mat4 lM = M;
     lM = glm::translate(lM, glm::vec3(0.0f, 0.0f, branch->leaves[i]->rootDistance()));
@@ -137,16 +138,17 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
     gluSphere(qobj,branch->leaves[i]->length(), 10, 10); 
     gluDeleteQuadric(qobj); 
   }
+  */
 
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
 }
 
 void drawGround(const glm::mat4 V) {
-  float groundRadius = 3.0f;
+  float groundRadius = 100.0f;
   glm::mat4 M=glm::mat4(1.0f);
   M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
-  M=glm::translate(M, glm::vec3(0.0f, -groundRadius+0.1f, 0.0f));
+  //M=glm::translate(M, glm::vec3(0.0f, -groundRadius+0.1f, 0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
   glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -174,7 +176,7 @@ void drawGround(const glm::mat4 V) {
     0, 1, 0,
     0, 1, 0
   };
-  float textureScale = 0.5f;
+  float textureScale = 25.0f;
   float textureCoords[] = {
     0, 0,
     textureScale, 0,
@@ -184,12 +186,14 @@ void drawGround(const glm::mat4 V) {
   glVertexPointer(3,GL_FLOAT,0,groundVertices);
   //glColorPointer(3, GL_FLOAT, 0, groundColors);
   glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
-  //glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
+  glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
 
+  /*
   GLUquadric *qobj = gluNewQuadric(); 
   gluQuadricTexture(qobj,GL_TRUE); 
-  gluSphere(qobj,groundRadius,50,50); 
+  gluCylinder(qobj,groundRadius, groundRadius, 0.1f, 50,50); 
   gluDeleteQuadric(qobj); 
+  */
 
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -293,6 +297,10 @@ int main(int argc, char* argv[]) {
 	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+  float lightColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+  glLightfv(GL_LIGHT0, GL_AMBIENT, lightColor);
+  float lightPosition[3] = { 0.0f, 5.0f, 5.0f };
+  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glEnable(GL_DEPTH_TEST);
   loadTexture("res/grass.tga", &grassTexture);
   loadTexture("res/branch.tga", &branchTexture);
