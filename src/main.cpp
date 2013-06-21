@@ -11,7 +11,7 @@
 #include "leaf.h"
 
 float speed_y=20;
-float cameraHeight = 4.0f;
+float cameraHeight = 1.0f;
 int lastTime=0;
 float angle_x;
 float angle_y;
@@ -202,26 +202,26 @@ void drawGround(const glm::mat4 V) {
 }
 
 void displayFrame(void) {
-	glClearColor(0,0,0,1);
+	glClearColor(0.53f,0.8f,1.0f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V=glm::lookAt(
 		glm::vec3(0.0f,cameraHeight,-10.0f),
 		glm::vec3(0.0f,4.0f,0.0f),
 		glm::vec3(0.0f,1.0f,0.0f));
-	
+
 	glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
-	
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(P));
 	glMatrixMode(GL_MODELVIEW);
-	
+
+  drawGround(V);
+
   //for(int i = 0; i < std::min(1, tree->branchCount()); i++) {
   for(int i = 0; i < tree->branchCount(); i++) {
     drawBranch(tree->getBranch(i), V);
   }
-		
-  drawGround(V);
 
 	glutSwapBuffers();
 }
