@@ -73,10 +73,10 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   float length = branch->length();
 
   glBindTexture(GL_TEXTURE_2D,branchTexture);
-  GLUquadric *qobj = gluNewQuadric(); 
-  gluQuadricTexture(qobj,GL_TRUE); 
-  gluCylinder(qobj,radius, 0, length,50,50); 
-  gluDeleteQuadric(qobj); 
+  GLUquadric *qobj = gluNewQuadric();
+  gluQuadricTexture(qobj,GL_TRUE);
+  gluCylinder(qobj,radius, 0, length,50,50);
+  gluDeleteQuadric(qobj);
 
   /*
   for(int i = 0; i < branch->leaves.size(); i++) {
@@ -84,10 +84,10 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
     lM = glm::translate(lM, glm::vec3(0.0f, 0.0f, branch->leaves[i]->rootDistance()));
     glLoadMatrixf(glm::value_ptr(V*lM));
     glBindTexture(GL_TEXTURE_2D,leafTexture);
-    GLUquadric *qobj = gluNewQuadric(); 
-    gluQuadricTexture(qobj,GL_TRUE); 
-    gluSphere(qobj,branch->leaves[i]->length(), 10, 10); 
-    gluDeleteQuadric(qobj); 
+    GLUquadric *qobj = gluNewQuadric();
+    gluQuadricTexture(qobj,GL_TRUE);
+    gluSphere(qobj,branch->leaves[i]->length(), 10, 10);
+    gluDeleteQuadric(qobj);
   }
   */
 
