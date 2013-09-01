@@ -233,7 +233,7 @@ void nextFrame(void) {
 	float delta = (actTime - lastTime) / 1000.f;
 	lastTime = actTime;
   float angleSpeed = 1.0f;
-  float zoomSpeed = 1.0f;
+  float zoomSpeed = 2.0f;
 
   if(cameraFlags[0]) // left {
     cameraCoordinates->changeAzimuth(angleSpeed * -delta);
@@ -243,6 +243,10 @@ void nextFrame(void) {
     cameraCoordinates->changePolar(angleSpeed * delta);
   if(cameraFlags[3]) // down
     cameraCoordinates->changePolar(angleSpeed * -delta);
+  if(cameraFlags[4]) // zoom in
+    cameraCoordinates->changeDistance(zoomSpeed * -delta);
+  if(cameraFlags[5]) // zoom out
+    cameraCoordinates->changeDistance(zoomSpeed * delta);
 
   tree->clock->tick();
 
@@ -291,6 +295,28 @@ void keyUp(int c, int x, int y) {
   }
 }
 
+void letterDown(unsigned char key, int x, int y) {
+  switch(key) {
+    case 'z':
+      cameraFlags[4] = true;
+      break;
+    case 'x':
+      cameraFlags[5] = true;
+      break;
+  }
+}
+
+void letterUp(unsigned char key, int x, int y) {
+  switch(key) {
+    case 'z':
+      cameraFlags[4] = false;
+      break;
+    case 'x':
+      cameraFlags[5] = false;
+      break;
+  }
+}
+
 
 int main(int argc, char* argv[]) {
   srand(time(0));
@@ -303,9 +329,12 @@ int main(int argc, char* argv[]) {
 	glutIdleFunc(nextFrame);
 
 	glewInit();
+
 	glutSpecialFunc(keyDown);
 	glutSpecialUpFunc(keyUp);
-	
+  glutKeyboardFunc(letterDown);
+  glutKeyboardUpFunc(letterUp);
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
   float lightColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
