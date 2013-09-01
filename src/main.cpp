@@ -324,24 +324,14 @@ void letterUp(unsigned char key, int x, int y) {
   }
 }
 
-
-int main(int argc, char* argv[]) {
-  srand(time(0));
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800,800);
-	glutInitWindowPosition(0,0);
-	glutCreateWindow("Growing Tree Simulation");        
-	glutDisplayFunc(displayFrame);
-	glutIdleFunc(nextFrame);
-
-	glewInit();
-
+void initKeyboard() {
 	glutSpecialFunc(keyDown);
 	glutSpecialUpFunc(keyUp);
   glutKeyboardFunc(letterDown);
   glutKeyboardUpFunc(letterUp);
+}
 
+void initLight() {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
   float lightColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -349,10 +339,41 @@ int main(int argc, char* argv[]) {
   float lightPosition[3] = { 0.0f, 5.0f, 5.0f };
   glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glEnable(GL_DEPTH_TEST);
+}
+
+void initTextures() {
   loadTexture("res/grass.tga", &grassTexture);
   loadTexture("res/branch.tga", &branchTexture);
   loadTexture("res/leaf.tga", &leafTexture);
+}
+
+void initGlut(int argc, char* argv[]) {
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitWindowSize(800,800);
+	glutInitWindowPosition(0,0);
+	glutCreateWindow("Growing Tree Simulation");
+	glutDisplayFunc(displayFrame);
+	glutIdleFunc(nextFrame);
+	glewInit();
+}
+
+void initRandomness() {
+  srand(time(0));
+}
+
+int main(int argc, char* argv[]) {
+  initRandomness();
+
+  initGlut(argc, argv);
+
+  initKeyboard();
+
+  initTextures();
+
+  initLight();
 
   glutMainLoop();
+
   return 0;
 }
