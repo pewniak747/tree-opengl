@@ -201,6 +201,12 @@ void drawGround(const glm::mat4 V) {
   //glDisableClientState(GL_COLOR_ARRAY);
 }
 
+void drawTree(Tree *tree, const glm::mat4 V) {
+  for(int i = 0; i < tree->branchCount(); i++) {
+    drawBranch(tree->getBranch(i), V);
+  }
+}
+
 void displayFrame(void) {
 	glClearColor(0.53f,0.8f,1.0f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -217,11 +223,7 @@ void displayFrame(void) {
 	glMatrixMode(GL_MODELVIEW);
 
   drawGround(V);
-
-  //for(int i = 0; i < std::min(1, tree->branchCount()); i++) {
-  for(int i = 0; i < tree->branchCount(); i++) {
-    drawBranch(tree->getBranch(i), V);
-  }
+  drawTree(tree, V);
 
 	glutSwapBuffers();
 }
