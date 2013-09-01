@@ -20,7 +20,7 @@ TGAImg image;
 
 Clock *worldClock = new Clock();
 Tree *tree = new Tree(worldClock);
-SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(10.0f, 0.0f, 0.45f * M_PI, 5.0f, 100.0f, 0.05 * M_PI, 0.45f * M_PI);
+SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(10.0f, 0.0f, 0.45f * M_PI, 5.0f, 25.0f, 0.05 * M_PI, 0.45f * M_PI);
 bool cameraFlags[6] = { false, false, false, false, false };
 
 #define CAMERA_UP_KEY GLUT_KEY_UP
