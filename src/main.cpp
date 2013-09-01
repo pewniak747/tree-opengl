@@ -22,6 +22,13 @@ Tree *tree = new Tree();
 SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(10.0f, 0.0f, 0.45f * M_PI);
 bool cameraFlags[6] = { false, false, false, false, false };
 
+#define CAMERA_UP_KEY GLUT_KEY_UP
+#define CAMERA_DOWN_KEY GLUT_KEY_DOWN
+#define CAMERA_LEFT_KEY GLUT_KEY_LEFT
+#define CAMERA_RIGHT_KEY GLUT_KEY_RIGHT
+#define CAMERA_ZOOMIN_KEY 'z'
+#define CAMERA_ZOOMOUT_KEY 'x'
+
 void loadTexture(char *filename, GLuint *handle) {
   printf("Loading texture %s\n", filename);
   if (image.Load(filename)==IMG_OK) {
@@ -263,16 +270,16 @@ void nextFrame(void) {
 
 void keyDown(int c, int x, int y) {
   switch (c) {
-    case GLUT_KEY_LEFT:
+    case CAMERA_LEFT_KEY:
       cameraFlags[0] = true;
       break;
-    case GLUT_KEY_RIGHT:
+    case CAMERA_RIGHT_KEY:
       cameraFlags[1] = true;
       break;
-    case GLUT_KEY_UP:
+    case CAMERA_UP_KEY:
       cameraFlags[2] = true;
       break;
-    case GLUT_KEY_DOWN:
+    case CAMERA_DOWN_KEY:
       cameraFlags[3] = true;
       break;
   }
@@ -280,16 +287,16 @@ void keyDown(int c, int x, int y) {
 
 void keyUp(int c, int x, int y) {
   switch (c) {
-    case GLUT_KEY_LEFT:
+    case CAMERA_LEFT_KEY:
       cameraFlags[0] = false;
       break;
-    case GLUT_KEY_RIGHT:
+    case CAMERA_RIGHT_KEY:
       cameraFlags[1] = false;
       break;
-    case GLUT_KEY_UP:
+    case CAMERA_UP_KEY:
       cameraFlags[2] = false;
       break;
-    case GLUT_KEY_DOWN:
+    case CAMERA_DOWN_KEY:
       cameraFlags[3] = false;
       break;
   }
@@ -297,10 +304,10 @@ void keyUp(int c, int x, int y) {
 
 void letterDown(unsigned char key, int x, int y) {
   switch(key) {
-    case 'z':
+    case CAMERA_ZOOMIN_KEY:
       cameraFlags[4] = true;
       break;
-    case 'x':
+    case CAMERA_ZOOMOUT_KEY:
       cameraFlags[5] = true;
       break;
   }
@@ -308,10 +315,10 @@ void letterDown(unsigned char key, int x, int y) {
 
 void letterUp(unsigned char key, int x, int y) {
   switch(key) {
-    case 'z':
+    case CAMERA_ZOOMIN_KEY:
       cameraFlags[4] = false;
       break;
-    case 'x':
+    case CAMERA_ZOOMOUT_KEY:
       cameraFlags[5] = false;
       break;
   }
