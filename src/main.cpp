@@ -11,7 +11,7 @@
 #include "leaf.h"
 #include "spherical_coordinates.h"
 
-int lastTime=0;
+int lastTime = 0;
 
 GLuint grassTexture;
 GLuint branchTexture;
@@ -72,62 +72,7 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   float radius = branch->radius()/2;
   float length = branch->length();
 
-  // draw cuboids
-  /*
-  float branchVertices[] = {
-    -radius, 0, -radius,
-    -radius, 0,  radius,
-    radius, 0, radius,
-    radius, 0, -radius,
-    -radius, length, -radius,
-    -radius, length, radius,
-    radius, length, radius,
-    radius, length, -radius
-  };
-
-  int branchIndexes[] = {
-    // top
-    0, 1, 2,
-    2, 3, 0,
-    // bottom
-    4, 5, 6,
-    6, 7, 4,
-    // left
-    0, 1, 4,
-    4, 5, 1,
-    // right
-    2, 3, 6,
-    6, 7, 3,
-    // front
-    1, 2, 5,
-    5, 6, 2,
-    // back
-    2, 3, 6,
-    6, 7, 3
-  };
-
-  glEnableClientState(GL_VERTEX_ARRAY);
-  //glEnableClientState(GL_COLOR_ARRAY);
-  glVertexPointer(3,GL_FLOAT,0,branchVertices);
-  //glColorPointer(3,GL_FLOAT,0,cubeColors);	
-
-  glDrawElements(GL_TRIANGLES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
-  */
-
-  // draw lines
-  float branchVertices[] = {
-    0, 0, 0,
-    0, length, 0
-  };
-  int branchIndexes[] = {
-    0, 1
-  };
-  //glEnableClientState(GL_VERTEX_ARRAY);
-  //glVertexPointer(3,GL_FLOAT,0,branchVertices);
-  //glDrawElements(GL_LINES,sizeof(branchIndexes)/sizeof(int),GL_UNSIGNED_INT,branchIndexes);
-  //glutSolidCone(radius, length, 30, 30);
   glBindTexture(GL_TEXTURE_2D,branchTexture);
-
   GLUquadric *qobj = gluNewQuadric(); 
   gluQuadricTexture(qobj,GL_TRUE); 
   gluCylinder(qobj,radius, 0, length,50,50); 
@@ -153,11 +98,9 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 void drawGround(const glm::mat4 V) {
   float groundRadius = 100.0f;
   glm::mat4 M=glm::mat4(1.0f);
-  //M=glm::translate(M, glm::vec3(0.0f, -groundRadius+0.1f, 0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
   glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
-  //glEnableClientState(GL_COLOR_ARRAY);
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -175,12 +118,6 @@ void drawGround(const glm::mat4 V) {
     0, 1, 2,
     2, 3, 0
   };
-  float groundColors[] = {
-    0, 1, 0,
-    0, 1, 0,
-    0, 1, 0,
-    0, 1, 0
-  };
   float textureScale = 25.0f;
   float textureCoords[] = {
     0, 0,
@@ -189,21 +126,12 @@ void drawGround(const glm::mat4 V) {
     0, textureScale
   };
   glVertexPointer(3,GL_FLOAT,0,groundVertices);
-  //glColorPointer(3, GL_FLOAT, 0, groundColors);
   glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
   glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
-
-  /*
-  GLUquadric *qobj = gluNewQuadric(); 
-  gluQuadricTexture(qobj,GL_TRUE); 
-  gluCylinder(qobj,groundRadius, groundRadius, 0.1f, 50,50); 
-  gluDeleteQuadric(qobj); 
-  */
 
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
-  //glDisableClientState(GL_COLOR_ARRAY);
 }
 
 void drawTree(Tree *tree, const glm::mat4 V) {
@@ -220,10 +148,7 @@ void displayFrame(void) {
   glm::vec3 cameraObserver = cameraCoordinates->toCarthesian();
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
 
-  // printf("camera coordinates: %.3f %.3f %.3f\n", cameraObserver.x, cameraObserver.y, cameraObserver.z);
-
 	glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
-
 	glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
 
 	glMatrixMode(GL_PROJECTION);
