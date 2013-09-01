@@ -9,9 +9,9 @@
 #include "tree.h"
 #include "branch.h"
 #include "leaf.h"
+#include "spherical_coordinates.h"
 
 float speed_y=20;
-float cameraHeight = 1.0f;
 int lastTime=0;
 float angle_y;
 
@@ -21,6 +21,8 @@ GLuint leafTexture;
 TGAImg image;
 
 Tree *tree = new Tree();
+SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(100.0f, 0.0f, 0.2f * M_PI);
+bool cameraFlags[6] = { false, false, false, false, false };
 
 void loadTexture(char *filename, GLuint *handle) {
   printf("Loading texture %s\n", filename);
@@ -211,7 +213,7 @@ void displayFrame(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glm::vec3 cameraTarget = glm::vec3(0.0f,4.0f,0.0f);
-  glm::vec3 cameraObserver = glm::vec3(0.0f, cameraHeight, -10.0f);
+  glm::vec3 cameraObserver = glm::vec3(0.0f, 1.0f, -10.0f);
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
@@ -229,12 +231,21 @@ void displayFrame(void) {
 }
 
 void nextFrame(void) {
-	int actTime=glutGet(GLUT_ELAPSED_TIME);
-	int interval=actTime-lastTime;
-	lastTime=actTime;
-	angle_y+=speed_y*interval/1000.0;
-	if (angle_y>360) angle_y-=360;
-	if (angle_y>360) angle_y+=360;
+	int actTime = glutGet(GLUT_ELAPSED_TIME);
+	int delta = (actTime - lastTime) / 1000.f;
+	lastTime = actTime;
+  float angleSpeed = 0.01f;
+  float zoomSpeed = 0.1f;
+
+  if(cameraFlags[0]) // left
+    cameraCoordinates->changePolar(angleSpeed * -delta);
+  if(cameraFlags[1]) // right
+    cameraCoordinates->changePolar(angleSpeed * delta);
+  if(cameraFlags[2]) // up
+    cameraCoordinates->changeAzimuth(angleSpeed * delta);
+  if(cameraFlags[3]) // down
+    cameraCoordinates->changeAzimuth(angleSpeed * -delta);
+
   tree->clock->tick();
 
   if(int(tree->clock->value * 1000) % 200 == 0) {
@@ -244,39 +255,41 @@ void nextFrame(void) {
   if(tree->branchCount() > 1 && int(tree->clock->value * 1000) % 10 == 0) {
     tree->getBranch(rand() % tree->branchCount())->addLeaf();
   }
-	
+
 	glutPostRedisplay();
 }
 
 void keyDown(int c, int x, int y) {
   switch (c) {
-    case GLUT_KEY_LEFT: 
-      speed_y=60;
+    case GLUT_KEY_LEFT:
+      cameraFlags[0] = false;
       break;
     case GLUT_KEY_RIGHT:
-      speed_y=-60;
+      cameraFlags[1] = false;
       break;
-    case GLUT_KEY_UP: 
-      if(cameraHeight < 10) cameraHeight += 0.1;
+    case GLUT_KEY_UP:
+      cameraFlags[2] = false;
       break;
     case GLUT_KEY_DOWN:
-      if(cameraHeight > 0) cameraHeight -= 0.1;
-      break;  
+      cameraFlags[3] = false;
+      break;
   }
 }
 
 void keyUp(int c, int x, int y) {
   switch (c) {
-    case GLUT_KEY_LEFT: 
-      speed_y=0;
+    case GLUT_KEY_LEFT:
+      cameraFlags[0] = true;
       break;
     case GLUT_KEY_RIGHT:
-      speed_y=-0;
+      cameraFlags[1] = true;
       break;
-    case GLUT_KEY_UP: 
+    case GLUT_KEY_UP:
+      cameraFlags[2] = true;
       break;
     case GLUT_KEY_DOWN:
-      break;  
+      cameraFlags[3] = true;
+      break;
   }
 }
 
