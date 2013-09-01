@@ -256,14 +256,7 @@ void nextFrame(void) {
     cameraCoordinates->changeDistance(zoomSpeed * delta);
 
   tree->clock->tick();
-
-  if(int(tree->clock->value * 1000) % 200 == 0) {
-    tree->addBranch();
-  }
-
-  if(tree->branchCount() > 1 && int(tree->clock->value * 1000) % 10 == 0) {
-    tree->getBranch(rand() % tree->branchCount())->addLeaf();
-  }
+  tree->grow();
 
 	glutPostRedisplay();
 }

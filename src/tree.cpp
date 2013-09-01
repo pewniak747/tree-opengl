@@ -13,6 +13,18 @@ Branch* Tree::getBranch(int x) {
   return branches[x];
 }
 
+void Tree::grow() {
+  float time = this->clock->value;
+
+  if(int(time * 1000) % 200 == 0) {
+    this->addBranch();
+  }
+
+  if(this->branchCount() > 1 && int(time * 1000) % 10 == 0) {
+    this->getBranch(rand() % this->branchCount())->addLeaf();
+  }
+}
+
 void Tree::addBranch() {
   Branch *newBranch;
   if(branches.size() == 0) {

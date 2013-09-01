@@ -11,11 +11,12 @@ class Tree {
   public:
     Tree();
     Branch* getBranch(int x);
-    void addBranch();
+    void grow();
     int branchCount();
     Clock *clock;
   private:
     std::vector<Branch*> branches;
+    void addBranch();
 };
 
 #endif // TREE_H
