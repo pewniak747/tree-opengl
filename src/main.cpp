@@ -216,7 +216,7 @@ void displayFrame(void) {
 	glClearColor(0.53f,0.8f,1.0f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+  glm::vec3 cameraTarget = glm::vec3(0.0f, tree->getTrunk()->length(), 0.0f);
   glm::vec3 cameraObserver = cameraCoordinates->toCarthesian();
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
 

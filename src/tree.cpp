@@ -25,6 +25,13 @@ void Tree::grow() {
   }
 }
 
+Branch *Tree::getTrunk() {
+  if(this->branchCount() > 1)
+    return this->getBranch(0);
+  else
+    return new Branch(this, clock->value, -1);
+}
+
 void Tree::addBranch() {
   Branch *newBranch;
   if(branches.size() == 0) {

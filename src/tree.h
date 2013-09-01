@@ -11,6 +11,7 @@ class Tree {
   public:
     Tree(Clock *clock);
     Branch* getBranch(int x);
+    Branch* getTrunk();
     void grow();
     int branchCount();
     Clock *clock;
