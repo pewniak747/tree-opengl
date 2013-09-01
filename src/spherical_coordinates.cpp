@@ -13,17 +13,26 @@ void SphericalCoordinates::changeDistance(float delta) {
 }
 
 void SphericalCoordinates::changePolar(float delta) {
+  float max = 2 * M_PI;
   this->polarAngle += delta;
   if(this->polarAngle < 0.0f)
-    this->polarAngle += 360.0f;
-  if(this->polarAngle > 360.0f)
-    this->polarAngle -= 360.f;
+    this->polarAngle += max;
+  if(this->polarAngle > max)
+    this->polarAngle -= max;
 }
 
 void SphericalCoordinates::changeAzimuth(float delta) {
+  float max = 0.5f * M_PI;
   this->azimuthAngle += delta;
   if(this->azimuthAngle < 0.0f)
     this->azimuthAngle = 0.0f;
-  if(this->azimuthAngle > 90.0f)
-    this->azimuthAngle = 90.0f;
+  if(this->azimuthAngle > max)
+    this->azimuthAngle = max;
+}
+
+glm::vec3 SphericalCoordinates::toCarthesian() {
+  float x = this->radialDistance * sin(this->polarAngle) * cos(this->azimuthAngle);
+  float y = this->radialDistance * sin(this->polarAngle) * sin(this->azimuthAngle);
+  float z = this->radialDistance * cos(this->polarAngle);
+  return glm::vec3(x, y, z);
 }
