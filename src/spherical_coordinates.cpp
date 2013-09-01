@@ -4,19 +4,38 @@ SphericalCoordinates::SphericalCoordinates(float radialDistance, float azimuthAn
   this->radialDistance = radialDistance;
   this->polarAngle = polarAngle;
   this->azimuthAngle = azimuthAngle;
+  this->minDistance = 0.0f;
+  this->maxDistance = FLT_MAX;
+  this->minPolar = 0.0f;
+  this->maxPolar = 0.5f * M_PI;
+}
+
+SphericalCoordinates::SphericalCoordinates(float radialDistance, float azimuthAngle, float polarAngle, float minDistance, float maxDistance, float minPolar, float maxPolar) {
+  this->radialDistance = radialDistance;
+  this->polarAngle = polarAngle;
+  this->azimuthAngle = azimuthAngle;
+  this->minDistance = minDistance;
+  this->maxDistance = maxDistance;
+  this->minPolar = minPolar;
+  this->maxPolar = maxPolar;
 }
 
 void SphericalCoordinates::changeDistance(float delta) {
+  float max = this->maxDistance;
+  float min = this->minDistance;
   this->radialDistance += delta;
-  if(this->radialDistance < 0)
-    this->radialDistance = 0;
+  if(this->radialDistance < min)
+    this->radialDistance = min;
+  if(this->radialDistance > max)
+    this->radialDistance = max;
 }
 
 void SphericalCoordinates::changePolar(float delta) {
-  float max = 0.5f * M_PI;
+  float max = this->maxPolar;
+  float min = this->minPolar;
   this->polarAngle += delta;
-  if(this->polarAngle < 0.0f)
-    this->polarAngle = 0;
+  if(this->polarAngle < min)
+    this->polarAngle = min;
   if(this->polarAngle > max)
     this->polarAngle = max;
 }
