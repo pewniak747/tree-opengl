@@ -262,23 +262,6 @@ void nextFrame(void) {
 void keyDown(int c, int x, int y) {
   switch (c) {
     case GLUT_KEY_LEFT:
-      cameraFlags[0] = false;
-      break;
-    case GLUT_KEY_RIGHT:
-      cameraFlags[1] = false;
-      break;
-    case GLUT_KEY_UP:
-      cameraFlags[2] = false;
-      break;
-    case GLUT_KEY_DOWN:
-      cameraFlags[3] = false;
-      break;
-  }
-}
-
-void keyUp(int c, int x, int y) {
-  switch (c) {
-    case GLUT_KEY_LEFT:
       cameraFlags[0] = true;
       break;
     case GLUT_KEY_RIGHT:
@@ -289,6 +272,23 @@ void keyUp(int c, int x, int y) {
       break;
     case GLUT_KEY_DOWN:
       cameraFlags[3] = true;
+      break;
+  }
+}
+
+void keyUp(int c, int x, int y) {
+  switch (c) {
+    case GLUT_KEY_LEFT:
+      cameraFlags[0] = false;
+      break;
+    case GLUT_KEY_RIGHT:
+      cameraFlags[1] = false;
+      break;
+    case GLUT_KEY_UP:
+      cameraFlags[2] = false;
+      break;
+    case GLUT_KEY_DOWN:
+      cameraFlags[3] = false;
       break;
   }
 }
