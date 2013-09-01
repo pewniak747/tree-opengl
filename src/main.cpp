@@ -18,7 +18,8 @@ GLuint branchTexture;
 GLuint leafTexture;
 TGAImg image;
 
-Tree *tree = new Tree();
+Clock *worldClock = new Clock();
+Tree *tree = new Tree(worldClock);
 SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(10.0f, 0.0f, 0.45f * M_PI);
 bool cameraFlags[6] = { false, false, false, false, false };
 
@@ -255,7 +256,7 @@ void nextFrame(void) {
   if(cameraFlags[5]) // zoom out
     cameraCoordinates->changeDistance(zoomSpeed * delta);
 
-  tree->clock->tick();
+  worldClock->tick();
   tree->grow();
 
 	glutPostRedisplay();

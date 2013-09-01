@@ -9,7 +9,7 @@ class Branch;
 
 class Tree {
   public:
-    Tree();
+    Tree(Clock *clock);
     Branch* getBranch(int x);
     void grow();
     int branchCount();

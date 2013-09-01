@@ -1,8 +1,8 @@
 #include "tree.h"
 #include "branch.h"
 
-Tree::Tree() {
-  clock = new Clock();
+Tree::Tree(Clock *clock) {
+  this->clock = clock;
 }
 
 int Tree::branchCount() {
