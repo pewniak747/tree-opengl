@@ -11,7 +11,7 @@ Leaf::Leaf(Tree *t, Branch *b) {
 
 float Leaf::length() {
   float dynamicLength = log(1+age()/100.0f);
-  return std::min(0.5f, dynamicLength);
+  return std::min(0.25f, dynamicLength);
 }
 
 float Leaf::age() {
