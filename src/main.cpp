@@ -11,9 +11,7 @@
 #include "leaf.h"
 #include "spherical_coordinates.h"
 
-float speed_y=20;
 int lastTime=0;
-float angle_y;
 
 GLuint grassTexture;
 GLuint branchTexture;
@@ -21,7 +19,7 @@ GLuint leafTexture;
 TGAImg image;
 
 Tree *tree = new Tree();
-SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(100.0f, 0.0f, 0.2f * M_PI);
+SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(10.0f, 0.0f, 0.45f * M_PI);
 bool cameraFlags[6] = { false, false, false, false, false };
 
 void loadTexture(char *filename, GLuint *handle) {
@@ -43,7 +41,6 @@ void loadTexture(char *filename, GLuint *handle) {
 
 void drawBranch(Branch *branch, const glm::mat4 V) {
   glm::mat4 M=glm::mat4(1.0f);
-  M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
   std::vector<int> parents = branch->parents();
   for(int l = parents.size()-1; l >= 0; l--) {
     M=glm::rotate(M, tree->getBranch(parents[l])->direction, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -148,7 +145,6 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 void drawGround(const glm::mat4 V) {
   float groundRadius = 100.0f;
   glm::mat4 M=glm::mat4(1.0f);
-  M=glm::rotate(M,angle_y,glm::vec3(0.0f,1.0f,0.0f));
   //M=glm::translate(M, glm::vec3(0.0f, -groundRadius+0.1f, 0.0f));
   glLoadMatrixf(glm::value_ptr(V*M));
   glBindTexture(GL_TEXTURE_2D,grassTexture);
@@ -212,9 +208,11 @@ void displayFrame(void) {
 	glClearColor(0.53f,0.8f,1.0f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glm::vec3 cameraTarget = glm::vec3(0.0f,4.0f,0.0f);
-  glm::vec3 cameraObserver = glm::vec3(0.0f, 1.0f, -10.0f);
+  glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+  glm::vec3 cameraObserver = cameraCoordinates->toCarthesian();
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
+
+  // printf("camera coordinates: %.3f %.3f %.3f\n", cameraObserver.x, cameraObserver.y, cameraObserver.z);
 
 	glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
 
@@ -232,19 +230,19 @@ void displayFrame(void) {
 
 void nextFrame(void) {
 	int actTime = glutGet(GLUT_ELAPSED_TIME);
-	int delta = (actTime - lastTime) / 1000.f;
+	float delta = (actTime - lastTime) / 1000.f;
 	lastTime = actTime;
-  float angleSpeed = 0.01f;
-  float zoomSpeed = 0.1f;
+  float angleSpeed = 1.0f;
+  float zoomSpeed = 1.0f;
 
-  if(cameraFlags[0]) // left
-    cameraCoordinates->changePolar(angleSpeed * -delta);
-  if(cameraFlags[1]) // right
-    cameraCoordinates->changePolar(angleSpeed * delta);
-  if(cameraFlags[2]) // up
-    cameraCoordinates->changeAzimuth(angleSpeed * delta);
-  if(cameraFlags[3]) // down
+  if(cameraFlags[0]) // left {
     cameraCoordinates->changeAzimuth(angleSpeed * -delta);
+  if(cameraFlags[1]) // right
+    cameraCoordinates->changeAzimuth(angleSpeed * delta);
+  if(cameraFlags[2]) // up
+    cameraCoordinates->changePolar(angleSpeed * delta);
+  if(cameraFlags[3]) // down
+    cameraCoordinates->changePolar(angleSpeed * -delta);
 
   tree->clock->tick();
 

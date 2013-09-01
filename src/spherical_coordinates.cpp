@@ -1,6 +1,6 @@
 #include "spherical_coordinates.h"
 
-SphericalCoordinates::SphericalCoordinates(float radialDistance, float polarAngle, float azimuthAngle) {
+SphericalCoordinates::SphericalCoordinates(float radialDistance, float azimuthAngle, float polarAngle) {
   this->radialDistance = radialDistance;
   this->polarAngle = polarAngle;
   this->azimuthAngle = azimuthAngle;
@@ -34,5 +34,5 @@ glm::vec3 SphericalCoordinates::toCarthesian() {
   float x = this->radialDistance * sin(this->polarAngle) * cos(this->azimuthAngle);
   float y = this->radialDistance * sin(this->polarAngle) * sin(this->azimuthAngle);
   float z = this->radialDistance * cos(this->polarAngle);
-  return glm::vec3(x, y, z);
+  return glm::vec3(x, z, y);
 }
