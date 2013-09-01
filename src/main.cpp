@@ -13,7 +13,6 @@
 float speed_y=20;
 float cameraHeight = 1.0f;
 int lastTime=0;
-float angle_x;
 float angle_y;
 
 GLuint grassTexture;
@@ -233,8 +232,6 @@ void nextFrame(void) {
 	int interval=actTime-lastTime;
 	lastTime=actTime;
 	angle_y+=speed_y*interval/1000.0;
-	if (angle_x>360) angle_x-=360;
-	if (angle_x>360) angle_x+=360;
 	if (angle_y>360) angle_y-=360;
 	if (angle_y>360) angle_y+=360;
   tree->clock->tick();
