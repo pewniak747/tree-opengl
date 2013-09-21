@@ -97,9 +97,6 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 }
 
 void drawGround(const glm::mat4 V) {
-  float groundRadius = 1.0f;
-  glm::mat4 M=glm::mat4(1.0f);
-  glLoadMatrixf(glm::value_ptr(V*M));
   glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -109,6 +106,8 @@ void drawGround(const glm::mat4 V) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+  int groundDimension = 50;
+  float groundRadius = 1.0f;
   float groundVertices[] = {
     -groundRadius, 0, -groundRadius,
     -groundRadius, 0, groundRadius,
@@ -126,9 +125,16 @@ void drawGround(const glm::mat4 V) {
     textureScale, textureScale,
     0, textureScale
   };
-  glVertexPointer(3,GL_FLOAT,0,groundVertices);
-  glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
-  glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
+
+  for(int x = 0; x < groundDimension; x++) {
+    for(int y = 0; y < groundDimension; y++) {
+      glm::mat4 M=glm::translate(glm::mat4(1.0f), glm::vec3(groundRadius * 2 * x - groundDimension / groundRadius, 0.0f, groundRadius * 2 * y - groundDimension / groundRadius));
+      glLoadMatrixf(glm::value_ptr(V*M));
+      glVertexPointer(3,GL_FLOAT,0,groundVertices);
+      glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
+      glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
+    }
+  }
 
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
