@@ -35,10 +35,12 @@ void loadTexture(char *filename, GLuint *handle) {
   if (image.Load(filename)==IMG_OK) {
     glGenTextures(1,handle);
     glBindTexture(GL_TEXTURE_2D,*handle);
-    if (image.GetBPP()==24)
+    if (image.GetBPP()==24) {
       glTexImage2D(GL_TEXTURE_2D,0,3,image.GetWidth(),image.GetHeight(),0, GL_RGB,GL_UNSIGNED_BYTE,image.GetImg());
-    else if (image.GetBPP()==32)
+    }
+    else if (image.GetBPP()==32) {
       glTexImage2D(GL_TEXTURE_2D,0,4,image.GetWidth(),image.GetHeight(),0, GL_RGBA,GL_UNSIGNED_BYTE,image.GetImg());
+    }
     else
       printf("Error loading texture %s\n", filename);
   }
@@ -149,8 +151,20 @@ void drawTree(Tree *tree, const glm::mat4 V) {
 
 void drawLight(const glm::mat4 V) {
   glLoadMatrixf(glm::value_ptr(V));
-  float lightPosition[4] = { 1.0f, 1.0f, 0.0f, 1.0f};
-  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
+  float light0Position[4] = { 0.0f, 10.0f, 0.0f, 1.0f};
+  glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
+
+  float light1Position[4] = { 5.0f, 0.0f, 0.0f, 1.0f};
+  float light1Ambient[] = { 0.2, 0.2, 0.2, 1.0 };
+  float light1Diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+  float light1Specular[] = { 1.0, 1.0, 1.0, 1.0 };
+
+  glLoadMatrixf(glm::value_ptr(V));
+  glLightfv(GL_LIGHT1, GL_AMBIENT, light1Ambient);
+  glLightfv(GL_LIGHT1, GL_DIFFUSE, light1Diffuse);
+  glLightfv(GL_LIGHT1, GL_SPECULAR, light1Specular);
+  glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
 }
 
 void displayFrame(void) {
@@ -267,6 +281,7 @@ void initKeyboard() {
 void initLight() {
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHT1);
 }
 
 void initTextures() {
