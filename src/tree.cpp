@@ -20,7 +20,7 @@ void Tree::grow() {
   float timeDelta = time - lastGrowTime;
   float leafTimeDelta = time - lastLeafGrowTime;
   float branchFrequency = 1.0f;
-  float leafFrequency = 3.0f;
+  float leafFrequency = 5.0f;
 
   int branchesToAdd = int(timeDelta * branchFrequency);
   if(branchCount() == 0) branchesToAdd = 1;
