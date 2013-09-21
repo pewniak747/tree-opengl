@@ -1,10 +1,10 @@
 #include "tree.h"
 #include "branch.h"
 
-Tree::Tree(Clock *clock) {
-  this->clock = clock;
-  this->lastGrowTime = clock->value;
-  this->lastLeafGrowTime = clock->value;
+Tree::Tree(Clock *_clock) {
+  clock = _clock;
+  lastGrowTime = clock->value;
+  lastLeafGrowTime = clock->value;
 }
 
 int Tree::branchCount() {
@@ -35,7 +35,7 @@ void Tree::grow() {
   if(branchCount() > 1) {
     for(int i = 0; i < leavesToAdd; i++) {
       getBranch(rand() % branchCount())->addLeaf();
-      this->lastLeafGrowTime = time;
+      lastLeafGrowTime = time;
     }
   }
 }
@@ -70,5 +70,5 @@ void Tree::addBranch() {
   }
   printf("Created branch: id = %d, parent = %d, level = %d.\n", branchCount(), newBranch->parent, newBranch->level);
   branches.push_back(newBranch);
-  this->lastGrowTime = clock->value;
+  lastGrowTime = clock->value;
 }

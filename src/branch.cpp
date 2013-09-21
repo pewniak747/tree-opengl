@@ -71,7 +71,7 @@ std::vector<int> Branch::parents() {
 }
 
 void Branch::addLeaf() {
-  if(level > 2 && this->leaves.size() < 5) {
+  if(level > 2 && leaves.size() < 5) {
     Leaf *newLeaf = new Leaf(tree, this);
     leaves.push_back(newLeaf);
     printf("Created leaf: id = %d, branch = %d\n", leaves.size(), 0);
