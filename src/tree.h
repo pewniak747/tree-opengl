@@ -18,6 +18,8 @@ class Tree {
   private:
     std::vector<Branch*> branches;
     void addBranch();
+    float lastGrowTime;
+    float lastLeafGrowTime;
 };
 
 #endif // TREE_H

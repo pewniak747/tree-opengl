@@ -52,11 +52,13 @@ void loadTexture(char *filename, GLuint *handle) {
 void drawLeaf(Leaf *leaf, glm::mat4 V, glm::mat4 M) {
   glm::mat4 lM = glm::translate(M, glm::vec3(0.0f, 0.0f, leaf->rootDistance()));
   glLoadMatrixf(glm::value_ptr(V*lM));
+  glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D,leafTexture);
   GLUquadric *qobj = gluNewQuadric();
   gluQuadricTexture(qobj,GL_TRUE);
   gluSphere(qobj,leaf->length(), 10, 10);
   gluDeleteQuadric(qobj);
+  glDisable(GL_TEXTURE_2D);
 }
 
 void drawBranch(Branch *branch, const glm::mat4 V) {
@@ -89,13 +91,11 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   gluQuadricTexture(qobj,GL_TRUE);
   gluCylinder(qobj,radius, 0, length,50,50);
   gluDeleteQuadric(qobj);
-
-  for(int i = 0; i < branch->leaves.size(); i++) {
-    //drawLeaf(branch->leaves[i], V, M);
-  }
-
-  glDisableClientState(GL_VERTEX_ARRAY);
   glDisable(GL_TEXTURE_2D);
+
+  for(int l = 0; l < branch->leaves.size(); l++) {
+    drawLeaf(branch->leaves[l], V, M);
+  }
 }
 
 void drawGround(const glm::mat4 V) {
