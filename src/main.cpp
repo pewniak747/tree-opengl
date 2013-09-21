@@ -22,6 +22,7 @@ Clock *worldClock = new Clock();
 Tree *tree = new Tree(worldClock);
 SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(10.0f, 0.0f, 0.45f * M_PI, 5.0f, 25.0f, 0.05 * M_PI, 0.45f * M_PI);
 bool cameraFlags[6] = { false, false, false, false, false };
+bool speedupFlag = false;
 
 #define CAMERA_UP_KEY GLUT_KEY_UP
 #define CAMERA_DOWN_KEY GLUT_KEY_DOWN
@@ -29,6 +30,9 @@ bool cameraFlags[6] = { false, false, false, false, false };
 #define CAMERA_RIGHT_KEY GLUT_KEY_RIGHT
 #define CAMERA_ZOOMIN_KEY 'z'
 #define CAMERA_ZOOMOUT_KEY 'x'
+#define CLOCK_SPEEDUP_KEY ' '
+
+#define CLOCK_SPEEDUP_FACTOR 10.0f
 
 void loadTexture(char *filename, GLuint *handle) {
   printf("Loading texture %s\n", filename);
@@ -255,6 +259,12 @@ void letterDown(unsigned char key, int x, int y) {
     case CAMERA_ZOOMOUT_KEY:
       cameraFlags[5] = true;
       break;
+    case CLOCK_SPEEDUP_KEY:
+      if(!speedupFlag) {
+        worldClock->speedUp(CLOCK_SPEEDUP_FACTOR);
+        speedupFlag = true;
+      }
+      break;
   }
 }
 
@@ -265,6 +275,12 @@ void letterUp(unsigned char key, int x, int y) {
       break;
     case CAMERA_ZOOMOUT_KEY:
       cameraFlags[5] = false;
+      break;
+    case CLOCK_SPEEDUP_KEY:
+      if(speedupFlag) {
+        worldClock->slowDown(CLOCK_SPEEDUP_FACTOR);
+        speedupFlag = false;
+      }
       break;
   }
 }

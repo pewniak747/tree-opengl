@@ -9,6 +9,14 @@ void Clock::tick() {
   value += speed;
 }
 
+void Clock::speedUp(float factor) {
+  speed *= factor;
+}
+
+void Clock::slowDown(float factor) {
+  speed /= factor;
+}
+
 float Clock::from(float time) {
   return value - time;
 }

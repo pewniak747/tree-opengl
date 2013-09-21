@@ -6,6 +6,8 @@ class Clock {
     Clock();
     void tick();
     float from(float time);
+    void speedUp(float factor);
+    void slowDown(float factor);
     float value;
   private:
     float speed;
