@@ -12,7 +12,7 @@ Sky::Sky(Clock *clock) {
   this->durations.push_back(ONE_DAY / 2);
   this->durations.push_back(ONE_DAY / 2 + 10.0f);
   this->durations.push_back(ONE_DAY / 2 + 20.0f);
-  this->durations.push_back(ONE_DAY / 2 + 30.0f);
+  this->durations.push_back(ONE_DAY - 10.0f);
   this->durations.push_back(ONE_DAY);
 }
 
