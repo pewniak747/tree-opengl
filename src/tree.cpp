@@ -21,9 +21,11 @@ void Tree::grow() {
   float leafTimeDelta = time - lastLeafGrowTime;
   float branchFrequency = 1.0f;
   float leafFrequency = 5.0f;
+  int maxBranches = 150;
 
   int branchesToAdd = int(timeDelta * branchFrequency);
   if(branchCount() == 0) branchesToAdd = 1;
+  if(branchCount() > maxBranches) branchesToAdd = 0;
   int leavesToAdd = int(leafTimeDelta * leafFrequency);
 
   for(int i = 0; i < branchesToAdd; i++) {
