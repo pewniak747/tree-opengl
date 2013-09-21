@@ -120,7 +120,7 @@ void drawGround(const glm::mat4 V) {
     0, 1, 2,
     2, 3, 0
   };
-  float textureScale = 1.0f;
+  float textureScale = 0.5f;
   float textureCoords[] = {
     0, 0,
     textureScale, 0,
