@@ -16,9 +16,9 @@ Branch* Tree::getBranch(int x) {
 }
 
 void Tree::grow() {
-  float time = this->clock->value;
-  float timeDelta = time - this->lastGrowTime;
-  float leafTimeDelta = time - this->lastLeafGrowTime;
+  float time = clock->value;
+  float timeDelta = time - lastGrowTime;
+  float leafTimeDelta = time - lastLeafGrowTime;
   float branchFrequency = 1.0f;
   float leafFrequency = 3.0f;
 
@@ -27,20 +27,20 @@ void Tree::grow() {
   int leavesToAdd = int(leafTimeDelta * leafFrequency);
 
   for(int i = 0; i < branchesToAdd; i++) {
-    this->addBranch();
+    addBranch();
   }
 
-  if(this->branchCount() > 1) {
+  if(branchCount() > 1) {
     for(int i = 0; i < leavesToAdd; i++) {
-      this->getBranch(rand() % this->branchCount())->addLeaf();
+      getBranch(rand() % branchCount())->addLeaf();
       this->lastLeafGrowTime = time;
     }
   }
 }
 
 Branch *Tree::getTrunk() {
-  if(this->branchCount() > 1)
-    return this->getBranch(0);
+  if(branchCount() > 1)
+    return getBranch(0);
   else
     return new Branch(this, clock->value, -1);
 }
