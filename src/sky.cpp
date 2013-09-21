@@ -1,12 +1,18 @@
 #include "sky.h"
 
-#define ONE_DAY 360.0f
+#define ONE_DAY 180.0f
 
 Sky::Sky(Clock *clock) {
   this->clock = clock;
   this->colors.push_back(glm::vec3(0.53f, 0.8f, 1.0f));
-  this->colors.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+  this->colors.push_back(glm::vec3(0.53f, 0.8f, 1.0f));
+  this->colors.push_back(glm::vec3(0.98f, 0.80f, 0.01f));
+  this->colors.push_back(glm::vec3(0.06f, 0.01f, 0.12f));
+  this->colors.push_back(glm::vec3(0.06f, 0.01f, 0.12f));
   this->durations.push_back(ONE_DAY / 2);
+  this->durations.push_back(ONE_DAY / 2 + 10.0f);
+  this->durations.push_back(ONE_DAY / 2 + 20.0f);
+  this->durations.push_back(ONE_DAY / 2 + 30.0f);
   this->durations.push_back(ONE_DAY);
 }
 
