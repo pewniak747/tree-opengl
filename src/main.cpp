@@ -175,12 +175,14 @@ void displayFrame(void) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(P));
 
-  glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-  glm::vec3 cameraObserver = cameraCoordinates->toCarthesian();
+  glMatrixMode(GL_MODELVIEW);
+
+  float altitude = tree->getTrunk()->length();
+  glm::vec3 cameraTarget = glm::vec3(0.0f, altitude, 0.0f);
+  glm::vec3 cameraObserver = cameraCoordinates->toCarthesian() + glm::vec3(0.0f, altitude, 0.0f);
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
 
-	glMatrixMode(GL_MODELVIEW);
   drawGround(V);
   drawTree(tree, V);
   drawLight(V);
