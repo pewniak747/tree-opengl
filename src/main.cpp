@@ -9,6 +9,7 @@
 #include "tree.h"
 #include "branch.h"
 #include "leaf.h"
+#include "sky.h"
 #include "spherical_coordinates.h"
 
 int lastTime = 0;
@@ -20,6 +21,8 @@ TGAImg image;
 
 Clock *worldClock = new Clock();
 Tree *tree = new Tree(worldClock);
+Sky *sky = new Sky(worldClock);
+
 SphericalCoordinates *cameraCoordinates = new SphericalCoordinates(10.0f, 0.0f, 0.45f * M_PI, 5.0f, 25.0f, 0.05 * M_PI, 0.45f * M_PI);
 bool cameraFlags[6] = { false, false, false, false, false };
 bool speedupFlag = false;
@@ -155,6 +158,7 @@ void drawLight(const glm::mat4 V) {
 
   float light0Position[] = { 0.0f, 10.0f, 0.0f, 1.0f};
   glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
+  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, worldClock->value / 180.0f);
 
   float light1Ambient[] = { 0.2, 0.2, 0.2, 1.0 };
   float light1Diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -168,13 +172,15 @@ void drawLight(const glm::mat4 V) {
 }
 
 void displayFrame(void) {
-	glClearColor(0.53f,0.8f,1.0f,1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glm::vec3 skyColor = sky->color();
+  printf("sky: %.03f %.03f %.03f\n", skyColor.r, skyColor.g, skyColor.b);
+  glClearColor(skyColor.r, skyColor.g, skyColor.b, 1);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
+  glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(glm::value_ptr(P));
+  glMatrixMode(GL_PROJECTION);
+  glLoadMatrixf(glm::value_ptr(P));
 
   glMatrixMode(GL_MODELVIEW);
 
@@ -182,13 +188,13 @@ void displayFrame(void) {
   glm::vec3 cameraTarget = glm::vec3(0.0f, altitude, 0.0f);
   glm::vec3 cameraObserver = cameraCoordinates->toCarthesian() + glm::vec3(0.0f, altitude, 0.0f);
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
+  glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
 
   drawGround(V);
   drawTree(tree, V);
   drawLight(V);
 
-	glutSwapBuffers();
+  glutSwapBuffers();
 }
 
 void nextFrame(void) {
