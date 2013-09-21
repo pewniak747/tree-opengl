@@ -152,15 +152,14 @@ void drawTree(Tree *tree, const glm::mat4 V) {
 void drawLight(const glm::mat4 V) {
   glLoadMatrixf(glm::value_ptr(V));
 
-  float light0Position[4] = { 0.0f, 10.0f, 0.0f, 1.0f};
+  float light0Position[] = { 0.0f, 10.0f, 0.0f, 1.0f};
   glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
 
-  float light1Position[4] = { 5.0f, 0.0f, 0.0f, 1.0f};
   float light1Ambient[] = { 0.2, 0.2, 0.2, 1.0 };
   float light1Diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
   float light1Specular[] = { 1.0, 1.0, 1.0, 1.0 };
+  float light1Position[] = { 5.0f, 0.5f, 0.0f, 1.0f};
 
-  glLoadMatrixf(glm::value_ptr(V));
   glLightfv(GL_LIGHT1, GL_AMBIENT, light1Ambient);
   glLightfv(GL_LIGHT1, GL_DIFFUSE, light1Diffuse);
   glLightfv(GL_LIGHT1, GL_SPECULAR, light1Specular);
@@ -171,7 +170,7 @@ void displayFrame(void) {
 	glClearColor(0.53f,0.8f,1.0f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glm::vec3 cameraTarget = glm::vec3(0.0f, tree->getTrunk()->length(), 0.0f);
+  glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
   glm::vec3 cameraObserver = cameraCoordinates->toCarthesian();
   glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
 
