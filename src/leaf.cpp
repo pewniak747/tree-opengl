@@ -5,7 +5,7 @@
 Leaf::Leaf(Tree *t, Branch *b) {
   tree = t;
   branch = b;
-  rootDistanceParameter = float(rand() % 100) / 100;
+  rootDistanceParameter = (rand() % 100) / 100.f;
   created_at = tree->clock->value;
 }
 
