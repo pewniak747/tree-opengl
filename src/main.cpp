@@ -173,7 +173,6 @@ void drawLight(const glm::mat4 V) {
 
 void displayFrame(void) {
   glm::vec3 skyColor = sky->color();
-  printf("sky: %.03f %.03f %.03f\n", skyColor.r, skyColor.g, skyColor.b);
   glClearColor(skyColor.r, skyColor.g, skyColor.b, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
