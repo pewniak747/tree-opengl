@@ -55,16 +55,18 @@ void Tree::addBranch() {
     newBranch->angle = 0;
   }
   else {
-    int maxLevel = 0;
-    for(int i = 0; i < branches.size(); i++)
-      if(branches[i]->level > maxLevel) maxLevel = branches[i]->level;
-    if(maxLevel > 3) maxLevel = 3;
-    int randLevel = rand() % (maxLevel+1);
+    int branchesPerLevel[] = { 0, 0, 0, 0, 0, 0 };
+    for(int i = 0; i < branches.size(); i++) {
+      branchesPerLevel[branches[i]->level]++;
+    }
+    int chosenLevel;
+    for(chosenLevel = 0; branchesPerLevel[chosenLevel] >= 1<<(2*chosenLevel); chosenLevel++);
+    chosenLevel--;
     std::vector<int> candidateBranches;
     for(int i = 0; i < branches.size(); i++)
-      if(branches[i]->level == randLevel) candidateBranches.push_back(i);
-    int choosenBranch = candidateBranches[rand() % candidateBranches.size()];
-    newBranch = new Branch(this, clock->value, choosenBranch);
+      if(branches[i]->level == chosenLevel) candidateBranches.push_back(i);
+    int chosenParent = candidateBranches[rand() % candidateBranches.size()];
+    newBranch = new Branch(this, clock->value, chosenParent);
   }
   printf("Created branch: id = %d, parent = %d, level = %d.\n", branchCount(), newBranch->parent, newBranch->level);
   branches.push_back(newBranch);
