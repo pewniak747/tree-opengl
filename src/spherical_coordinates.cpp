@@ -21,37 +21,37 @@ SphericalCoordinates::SphericalCoordinates(float radialDistance, float azimuthAn
 }
 
 void SphericalCoordinates::changeDistance(float delta) {
-  float max = this->maxDistance;
-  float min = this->minDistance;
-  this->radialDistance += delta;
-  if(this->radialDistance < min)
-    this->radialDistance = min;
-  if(this->radialDistance > max)
-    this->radialDistance = max;
+  float max = maxDistance;
+  float min = minDistance;
+  radialDistance += delta;
+  if(radialDistance < min)
+    radialDistance = min;
+  if(radialDistance > max)
+    radialDistance = max;
 }
 
 void SphericalCoordinates::changePolar(float delta) {
-  float max = this->maxPolar;
-  float min = this->minPolar;
-  this->polarAngle += delta;
-  if(this->polarAngle < min)
-    this->polarAngle = min;
-  if(this->polarAngle > max)
-    this->polarAngle = max;
+  float max = maxPolar;
+  float min = minPolar;
+  polarAngle += delta;
+  if(polarAngle < min)
+    polarAngle = min;
+  if(polarAngle > max)
+    polarAngle = max;
 }
 
 void SphericalCoordinates::changeAzimuth(float delta) {
   float max = 2 * M_PI;
-  this->azimuthAngle += delta;
-  if(this->azimuthAngle < 0.0f)
-    this->azimuthAngle += max;
-  if(this->azimuthAngle > max)
-    this->azimuthAngle -= max;
+  azimuthAngle += delta;
+  if(azimuthAngle < 0.0f)
+    azimuthAngle += max;
+  if(azimuthAngle > max)
+    azimuthAngle -= max;
 }
 
 glm::vec3 SphericalCoordinates::toCarthesian() {
-  float x = this->radialDistance * sin(this->polarAngle) * cos(this->azimuthAngle);
-  float y = this->radialDistance * sin(this->polarAngle) * sin(this->azimuthAngle);
-  float z = this->radialDistance * cos(this->polarAngle);
+  float x = radialDistance * sin(polarAngle) * cos(azimuthAngle);
+  float y = radialDistance * sin(polarAngle) * sin(azimuthAngle);
+  float z = radialDistance * cos(polarAngle);
   return glm::vec3(x, z, y);
 }
