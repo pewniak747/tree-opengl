@@ -17,15 +17,15 @@ Sky::Sky(Clock *clock) {
 }
 
 glm::vec3 Sky::color() {
-  float time = int(clock->value) % int(ONE_DAY); // 6 minutes
+  float time = fmod(clock->value, ONE_DAY);
   int colorIndex;
   for(colorIndex = 0; durations[colorIndex] < time; colorIndex++);
   int nextColorIndex = (colorIndex + 1) % colors.size();
   int previousColorIndex = (colorIndex + colors.size() - 1) % colors.size();
   glm::vec3 currentColor = colors[colorIndex];
   glm::vec3 nextColor = colors[nextColorIndex];
-  float diffTime = time - float(int(durations[previousColorIndex]) % int(ONE_DAY));
-  float maxDiffTime = (durations[colorIndex] - float(int(durations[previousColorIndex]) % int(ONE_DAY)));
+  float diffTime = time - fmod(durations[previousColorIndex], ONE_DAY);
+  float maxDiffTime = (durations[colorIndex] - fmod(durations[previousColorIndex], ONE_DAY));
   float diffFactor = diffTime / maxDiffTime;
   float diffRed = (nextColor.r - currentColor.r) * diffFactor;
   float diffGreen = (nextColor.g - currentColor.g) * diffFactor;
