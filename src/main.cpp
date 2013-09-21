@@ -32,21 +32,18 @@ bool cameraFlags[6] = { false, false, false, false, false };
 
 void loadTexture(char *filename, GLuint *handle) {
   printf("Loading texture %s\n", filename);
-  if (image.Load(filename)==IMG_OK) {
-    glGenTextures(1,handle);
-    glBindTexture(GL_TEXTURE_2D,*handle);
-    if (image.GetBPP()==24) {
-      glTexImage2D(GL_TEXTURE_2D,0,3,image.GetWidth(),image.GetHeight(),0, GL_RGB,GL_UNSIGNED_BYTE,image.GetImg());
+  if (image.Load(filename) == IMG_OK) {
+    glGenTextures(1, handle);
+    glBindTexture(GL_TEXTURE_2D, *handle);
+    if (image.GetBPP() == 24) {
+      glTexImage2D(GL_TEXTURE_2D, 0, 3, image.GetWidth(), image.GetHeight(), 0, GL_RGB,GL_UNSIGNED_BYTE, image.GetImg());
     }
-    else if (image.GetBPP()==32) {
-      glTexImage2D(GL_TEXTURE_2D,0,4,image.GetWidth(),image.GetHeight(),0, GL_RGBA,GL_UNSIGNED_BYTE,image.GetImg());
+    else if (image.GetBPP() == 32) {
+      glTexImage2D(GL_TEXTURE_2D, 0, 4, image.GetWidth(), image.GetHeight(), 0, GL_RGBA,GL_UNSIGNED_BYTE, image.GetImg());
     }
-    else
-      printf("Error loading texture %s\n", filename);
   }
-  else {
+  else
     printf("Error loading texture %s\n", filename);
-  }
 }
 
 void drawLeaf(Leaf *leaf, glm::mat4 V, glm::mat4 M) {
