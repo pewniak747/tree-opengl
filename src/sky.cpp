@@ -25,7 +25,8 @@ glm::vec3 Sky::color() {
   glm::vec3 currentColor = colors[colorIndex];
   glm::vec3 nextColor = colors[nextColorIndex];
   float diffTime = time - float(int(durations[previousColorIndex]) % int(ONE_DAY));
-  float diffFactor = diffTime / (durations[nextColorIndex] - float(int(durations[colorIndex]) % int(ONE_DAY)));
+  float maxDiffTime = (durations[colorIndex] - float(int(durations[previousColorIndex]) % int(ONE_DAY)));
+  float diffFactor = diffTime / maxDiffTime;
   float diffRed = (nextColor.r - currentColor.r) * diffFactor;
   float diffGreen = (nextColor.g - currentColor.g) * diffFactor;
   float diffBlue = (nextColor.b - currentColor.b) * diffFactor;
