@@ -89,7 +89,7 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
   gluDeleteQuadric(qobj);
 
   for(int i = 0; i < branch->leaves.size(); i++) {
-    drawLeaf(branch->leaves[i], V, M);
+    //drawLeaf(branch->leaves[i], V, M);
   }
 
   glDisableClientState(GL_VERTEX_ARRAY);
@@ -97,13 +97,13 @@ void drawBranch(Branch *branch, const glm::mat4 V) {
 }
 
 void drawGround(const glm::mat4 V) {
-  float groundRadius = 100.0f;
+  float groundRadius = 1.0f;
   glm::mat4 M=glm::mat4(1.0f);
   glLoadMatrixf(glm::value_ptr(V*M));
   glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
-  glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glEnable(GL_TEXTURE_2D);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -119,7 +119,7 @@ void drawGround(const glm::mat4 V) {
     0, 1, 2,
     2, 3, 0
   };
-  float textureScale = 25.0f;
+  float textureScale = 1.0f;
   float textureCoords[] = {
     0, 0,
     textureScale, 0,
@@ -141,6 +141,12 @@ void drawTree(Tree *tree, const glm::mat4 V) {
   }
 }
 
+void drawLight(const glm::mat4 V) {
+  glLoadMatrixf(glm::value_ptr(V));
+  float lightPosition[4] = { 1.0f, 1.0f, 0.0f, 1.0f};
+  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+}
+
 void displayFrame(void) {
 	glClearColor(0.53f,0.8f,1.0f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -154,10 +160,11 @@ void displayFrame(void) {
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(P));
-	glMatrixMode(GL_MODELVIEW);
 
+	glMatrixMode(GL_MODELVIEW);
   drawGround(V);
   drawTree(tree, V);
+  drawLight(V);
 
 	glutSwapBuffers();
 }
@@ -252,13 +259,8 @@ void initKeyboard() {
 }
 
 void initLight() {
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-  float lightColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-  glLightfv(GL_LIGHT0, GL_AMBIENT, lightColor);
-  float lightPosition[3] = { 0.0f, 5.0f, 5.0f };
-  glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glEnable(GL_DEPTH_TEST);
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
 }
 
 void initTextures() {
@@ -276,6 +278,7 @@ void initGlut(int argc, char* argv[]) {
 	glutDisplayFunc(displayFrame);
 	glutIdleFunc(nextFrame);
 	glewInit();
+  glEnable(GL_DEPTH_TEST);
 }
 
 void initRandomness() {
@@ -289,9 +292,9 @@ int main(int argc, char* argv[]) {
 
   initKeyboard();
 
-  initTextures();
-
   initLight();
+
+  initTextures();
 
   glutMainLoop();
 
