@@ -170,15 +170,15 @@ void displayFrame(void) {
 	glClearColor(0.53f,0.8f,1.0f,1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-  glm::vec3 cameraObserver = cameraCoordinates->toCarthesian();
-  glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
-
-	glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
 	glm::mat4 P=glm::perspective(50.0f, 1.0f, 1.0f, 50.0f);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(glm::value_ptr(P));
+
+  glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+  glm::vec3 cameraObserver = cameraCoordinates->toCarthesian();
+  glm::vec3 cameraNose = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::mat4 V=glm::lookAt(cameraObserver, cameraTarget, cameraNose);
 
 	glMatrixMode(GL_MODELVIEW);
   drawGround(V);
