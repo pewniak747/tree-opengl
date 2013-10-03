@@ -107,6 +107,7 @@ void drawGround(const glm::mat4 V) {
   glBindTexture(GL_TEXTURE_2D,grassTexture);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glEnableClientState(GL_NORMAL_ARRAY);
   glEnable(GL_TEXTURE_2D);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -132,6 +133,9 @@ void drawGround(const glm::mat4 V) {
     textureScale, textureScale,
     0, textureScale
   };
+  float groundNormals[] = {
+    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0
+  };
 
   for(int x = 0; x < groundDimension; x++) {
     for(int y = 0; y < groundDimension; y++) {
@@ -139,11 +143,13 @@ void drawGround(const glm::mat4 V) {
       glLoadMatrixf(glm::value_ptr(V*M));
       glVertexPointer(3,GL_FLOAT,0,groundVertices);
       glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
+      glNormalPointer(GL_FLOAT, 0, groundNormals);
       glDrawElements(GL_TRIANGLES,sizeof(groundIndexes)/sizeof(int),GL_UNSIGNED_INT,groundIndexes);
     }
   }
 
   glDisable(GL_TEXTURE_2D);
+  glDisableClientState(GL_NORMAL_ARRAY);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -159,7 +165,7 @@ void drawLight(const glm::mat4 V) {
 
   float light0Position[] = { 0.0f, 10.0f, 0.0f, 1.0f};
   glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
-  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, worldClock->value / 180.0f);
+  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, fmod(worldClock->value / 90.0f, 180.0f));
 
   float light1Ambient[] = { 0.2, 0.2, 0.2, 1.0 };
   float light1Diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
@@ -320,6 +326,7 @@ void initGlut(int argc, char* argv[]) {
 	glutIdleFunc(nextFrame);
 	glewInit();
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_NORMALIZE);
 }
 
 void initRandomness() {
