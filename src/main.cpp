@@ -164,8 +164,9 @@ void drawLight(const glm::mat4 V) {
   glLoadMatrixf(glm::value_ptr(V));
 
   float light0Position[] = { 0.0f, 10.0f, 0.0f, 1.0f};
+  float light0Attenuation = pow(sin(2 * M_PI * worldClock->value / 360.0f - M_PI / 4), 2);
   glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
-  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, fmod(worldClock->value / 90.0f, 180.0f));
+  glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, light0Attenuation);
 
   float light1Ambient[] = { 0.2, 0.2, 0.2, 1.0 };
   float light1Diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
