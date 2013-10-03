@@ -9,10 +9,10 @@ Sky::Sky(Clock *_clock) {
   colors.push_back(glm::vec3(0.98f, 0.80f, 0.01f));
   colors.push_back(glm::vec3(0.06f, 0.01f, 0.12f));
   colors.push_back(glm::vec3(0.06f, 0.01f, 0.12f));
-  durations.push_back(ONE_DAY / 2);
-  durations.push_back(ONE_DAY / 2 + 10.0f);
-  durations.push_back(ONE_DAY / 2 + 20.0f);
-  durations.push_back(ONE_DAY - 10.0f);
+  durations.push_back(75.0f);
+  durations.push_back(85.0f);
+  durations.push_back(95.0f);
+  durations.push_back(170.0f);
   durations.push_back(ONE_DAY);
 }
 

@@ -163,8 +163,8 @@ void drawTree(Tree *tree, const glm::mat4 V) {
 void drawLight(const glm::mat4 V) {
   glLoadMatrixf(glm::value_ptr(V));
 
-  float light0Position[] = { 0.0f, 10.0f, 0.0f, 1.0f};
-  float light0Attenuation = pow(sin(2 * M_PI * worldClock->value / 360.0f - M_PI / 4), 2);
+  float light0Position[] = { 0.0f, 20.0f, 0.0f, 1.0f};
+  float light0Attenuation = 10*pow(sin(2 * M_PI * worldClock->value / 360.0f - M_PI / 4), 2);
   glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
   glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, light0Attenuation);
 
